@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunpay.serv.dao.MembercardDao" >
+  <resultMap id="BaseResultMap" type="com.yunpay.serv.model.Membercard" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="template_id" property="template_id" jdbcType="INTEGER" />
+    <result column="card_id" property="card_id" jdbcType="VARCHAR" />
+    <result column="channelType" property="channelType" jdbcType="INTEGER" />
+    <result column="userCardCode" property="userCardCode" jdbcType="VARCHAR" />
+    <result column="openId" property="openId" jdbcType="VARCHAR" />
+    <result column="aliUserCardCode" property="aliUserCardCode" jdbcType="VARCHAR" />
+    <result column="number" property="number" jdbcType="VARCHAR" />
+    <result column="bonus" property="bonus" jdbcType="INTEGER" />
+    <result column="balance" property="balance" jdbcType="REAL" />
+    <result column="payPass" property="payPass" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="createdAt" property="createdAt" jdbcType="TIMESTAMP" />
+    <result column="updatedAt" property="updatedAt" jdbcType="TIMESTAMP" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="birthday" property="birthday" jdbcType="VARCHAR" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="education" property="education" jdbcType="VARCHAR" />
+    <result column="career" property="career" jdbcType="VARCHAR" />
+    <result column="industry" property="industry" jdbcType="VARCHAR" />
+    <result column="income" property="income" jdbcType="VARCHAR" />
+    <result column="habit" property="habit" jdbcType="VARCHAR" />
+    <result column="storeNo" property="storeNo" jdbcType="VARCHAR" />
+    <result column="merchantNo" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="orgNo" property="orgNo" jdbcType="VARCHAR" />
+    <result column="totalBonus" property="totalBonus" jdbcType="INTEGER" />
+    <result column="sourceScene" property="sourceScene" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,template_id,card_id,channelType,userCardCode,openId,aliUserCardCode,number,bonus,balance,payPass,status, 
+    createdAt,updatedAt,nickname,sex,mobile,name,birthday,idcard,email,location, 
+    education,career,industry,income,habit,storeNo,merchantNo,orgNo,totalBonus,sourceScene
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_membercard
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_membercard
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.yunpay.serv.model.Membercard"  useGeneratedKeys="true" keyProperty="id">
+    insert into t_membercard (id,template_id,card_id,channelType,userCardCode,openId,aliUserCardCode,
+      number,bonus,balance,payPass,status,createdAt,updatedAt,nickname,sex,mobile,name,birthday,idcard,email, 
+      location,education,career,industry,income,habit,storeNo,merchantNo,orgNo,totalBonus,sourceScene)
+    values (#{id,jdbcType=INTEGER},#{template_id,jdbcType=INTEGER},#{card_id,jdbcType=VARCHAR},#{channelType,jdbcType=INTEGER},
+    #{userCardCode,jdbcType=VARCHAR},#{openId,jdbcType=VARCHAR},
+    #{aliUserCardCode,jdbcType=VARCHAR},#{number,jdbcType=VARCHAR},#{bonus,jdbcType=INTEGER}, 
+      #{balance,jdbcType=REAL},#{payPass,jdbcType=VARCHAR},#{status,jdbcType=INTEGER}, 
+      #{createdAt,jdbcType=TIMESTAMP},#{updatedAt,jdbcType=TIMESTAMP},#{nickname,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=VARCHAR},#{mobile,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR}, 
+      #{birthday,jdbcType=VARCHAR},#{idcard,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR}, 
+      #{location,jdbcType=VARCHAR},#{education,jdbcType=VARCHAR},#{career,jdbcType=VARCHAR}, 
+      #{industry,jdbcType=VARCHAR},#{income,jdbcType=VARCHAR},#{habit,jdbcType=VARCHAR}, 
+      #{storeNo,jdbcType=VARCHAR},#{merchantNo,jdbcType=VARCHAR} ,
+      #{orgNo,jdbcType=VARCHAR},#{totalBonus,jdbcType=INTEGER},#{sourceScene,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.yunpay.serv.model.Membercard" >
+    insert into t_membercard
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="id != null" >
+        template_id,
+      </if>
+      <if test="card_id != null" >
+        card_id,
+      </if>
+      <if test="channelType != null" >
+        channelType,
+      </if>
+      <if test="userCardCode != null" >
+        userCardCode,
+      </if>
+      <if test="openId != null" >
+        openId,
+      </if>
+      <if test="aliUserCardCode != null" >
+        aliUserCardCode,
+      </if>
+      <if test="number != null" >
+        number,
+      </if>
+      <if test="bonus != null" >
+        bonus,
+      </if>
+      <if test="balance != null" >
+        balance,
+      </if>
+      <if test="payPass != null" >
+        payPass,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createdAt != null" >
+        createdAt,
+      </if>
+      <if test="updatedAt != null" >
+        updatedAt,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="mobile != null" >
+        mobile,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="birthday != null" >
+        birthday,
+      </if>
+      <if test="idcard != null" >
+        idcard,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="location != null" >
+        location,
+      </if>
+      <if test="education != null" >
+        education,
+      </if>
+      <if test="career != null" >
+        career,
+      </if>
+      <if test="industry != null" >
+        industry,
+      </if>
+      <if test="income != null" >
+        income,
+      </if>
+      <if test="habit != null" >
+        habit,
+      </if>
+      <if test="storeNo != null" >
+        storeNo,
+      </if>
+      <if test="merchantNo != null" >
+        merchantNo,
+      </if>
+      <if test="orgNo != null" >
+        orgNo,
+      </if>
+      <if test="totalBonus != null" >
+        totalBonus,
+      </if>
+      <if test="sourceScene != null" >
+        sourceScene,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="template_id != null" >
+        #{template_id,jdbcType=INTEGER},
+      </if>
+      <if test="card_id != null" >
+        #{card_id,jdbcType=VARCHAR},
+      </if>
+      <if test="channelType != null" >
+        #{channelType,jdbcType=INTEGER},
+      </if>
+      <if test="userCardCode != null" >
+        #{userCardCode,jdbcType=VARCHAR},
+      </if>
+      <if test="openId != null" >
+        #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="aliUserCardCode != null" >
+        #{aliUserCardCode,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="bonus != null" >
+        #{bonus,jdbcType=INTEGER},
+      </if>
+      <if test="balance != null" >
+        #{balance,jdbcType=REAL},
+      </if>
+      <if test="payPass != null" >
+        #{payPass,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createdAt != null" >
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null" >
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nickname != null" >
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="education != null" >
+        #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="career != null" >
+        #{career,jdbcType=VARCHAR},
+      </if>
+      <if test="industry != null" >
+        #{industry,jdbcType=VARCHAR},
+      </if>
+      <if test="income != null" >
+        #{income,jdbcType=VARCHAR},
+      </if>
+      <if test="habit != null" >
+        #{habit,jdbcType=VARCHAR},
+      </if>
+      <if test="storeNo != null" >
+        #{storeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orgNo != null" >
+        #{orgNo,jdbcType=VARCHAR},
+      </if>
+      <if test="totalBonus != null" >
+        #{totalBonus,jdbcType=INTEGER},
+      </if>
+       <if test="sourceScene != null" >
+        #{sourceScene,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.yunpay.serv.model.Membercard" >
+    update t_membercard
+    <set>
+      <if test="card_id != null" >
+        card_id = #{card_id,jdbcType=VARCHAR},
+      </if>
+      <if test="channelType != null" >
+        channelType=#{channelType,jdbcType=INTEGER},
+      </if>
+      <if test="userCardCode != null" >
+        userCardCode = #{userCardCode,jdbcType=VARCHAR},
+      </if>
+       <if test="openId != null" >
+        openId = #{openId,jdbcType=VARCHAR},
+      </if>
+      <if test="aliUserCardCode != null" >
+        aliUserCardCode = #{aliUserCardCode,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="bonus != null" >
+        bonus = #{bonus,jdbcType=INTEGER},
+      </if>
+      <if test="balance != null" >
+        balance = #{balance,jdbcType=REAL},
+      </if>
+      <if test="payPass != null" >
+        payPass = #{payPass,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createdAt != null" >
+        createdAt = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null" >
+        updatedAt = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        birthday = #{birthday,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null" >
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null" >
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="education != null" >
+        education = #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="career != null" >
+        career = #{career,jdbcType=VARCHAR},
+      </if>
+      <if test="industry != null" >
+        industry = #{industry,jdbcType=VARCHAR},
+      </if>
+      <if test="income != null" >
+        income = #{income,jdbcType=VARCHAR},
+      </if>
+      <if test="habit != null" >
+        habit = #{habit,jdbcType=VARCHAR},
+      </if>
+      <if test="storeNo != null" >
+        storeNo = #{storeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantNo != null" >
+        merchantNo = #{merchantNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orgNo != null" >
+        orgNo = #{orgNo,jdbcType=VARCHAR},
+      </if>
+      <if test="totalBonus != null" >
+        totalBonus = #{totalBonus,jdbcType=INTEGER},
+      </if>
+      <if test="sourceScene != null" >
+        sourceScene = #{sourceScene,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="update" parameterType="com.yunpay.serv.model.Membercard" >
+    update t_membercard
+    set card_id = #{card_id,jdbcType=VARCHAR},
+    channelType = #{channelType,jdbcType=INTEGER},
+      userCardCode = #{userCardCode,jdbcType=VARCHAR},
+      openId = #{openId,jdbcType=VARCHAR},
+      aliUserCardCode = #{aliUserCardCode,jdbcType=VARCHAR},
+      number = #{number,jdbcType=VARCHAR},
+      bonus = #{bonus,jdbcType=INTEGER},
+      balance = #{balance,jdbcType=REAL},
+      payPass = #{payPass,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      createdAt = #{createdAt,jdbcType=TIMESTAMP},
+      updatedAt = #{updatedAt,jdbcType=TIMESTAMP},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      birthday = #{birthday,jdbcType=VARCHAR},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      education = #{education,jdbcType=VARCHAR},
+      career = #{career,jdbcType=VARCHAR},
+      industry = #{industry,jdbcType=VARCHAR},
+      income = #{income,jdbcType=VARCHAR},
+      habit = #{habit,jdbcType=VARCHAR},
+      storeNo = #{storeNo,jdbcType=VARCHAR},
+      merchantNo = #{merchantNo,jdbcType=VARCHAR},
+      orgNo = #{orgNo,jdbcType=VARCHAR},
+      totalBonus = #{totalBonus,jdbcType=INTEGER},
+      sourceScene = #{sourceScene,jdbcType=VARCHAR} 
+      where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

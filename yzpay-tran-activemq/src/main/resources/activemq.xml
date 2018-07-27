@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:amq="http://activemq.apache.org/schema/core"
+    xmlns:jms="http://www.springframework.org/schema/jms"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+        http://www.springframework.org/schema/jms
+        http://www.springframework.org/schema/jms/spring-jms-4.3.xsd
+        http://activemq.apache.org/schema/core
+        http://activemq.apache.org/schema/core/activemq-core-5.12.1.xsd">
+    <!-- 配置注解扫描的包路径 -->
+    <context:component-scan base-package="com.yunpay.activemq" />
+    <!--  
+    <amq:connectionFactory id="amqConnectionFactory" 
+        brokerURL="tcp://127.0.0.1:61616" 
+        userName="admin" 
+        password="admin" />
+      -->    
+    <!-- 真正可以产生Connection的ConnectionFactory，由对应的 JMS服务厂商提供 -->    
+    <bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">    
+        <!-- ActiveMQ服务地址 -->    
+        <property name="brokerURL" value="tcp://119.29.225.137:61616"/>    
+        <property name="userName" value="admin"></property>    
+        <property name="password" value="admin"></property>    
+        <!-- 这里定义重试策略,注意：只有持久化的才会重试-->    
+        <property name="redeliveryPolicyMap" ref="redeliveryPolicyMap"/>    
+    </bean>
+    
+     <!--这里设置各个消息队列的重发机制-->    
+    <bean id="redeliveryPolicyMap" class="org.apache.activemq.broker.region.policy.RedeliveryPolicyMap">    
+        <property name="redeliveryPolicyEntries">    
+            <list>    
+                <ref bean="smsRedeliveryPolicy"/>   
+            </list>    
+        </property>    
+    </bean>   
+    
+    <!--这个是队列目的地 -->
+    <bean id="queueDestination" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg>
+            <value>yzpay.coupon.notify</value>
+        </constructor-arg>
+    </bean>
+    
+    <bean id="smsRedeliveryPolicy" class="org.apache.activemq.RedeliveryPolicy">    
+        <!--重发次数,默认为6次   这里设置为3次-->    
+        <property name="maximumRedeliveries" value="4"/>
+        <!-- 重发时间间隔,默认为1秒 -->
+        <property name="initialRedeliveryDelay" value="5000"/>
+        <!-- 重连时间间隔递增倍数，只有值大于1和启用useExponentialBackOff参数时才生效 -->
+        <property name="backOffMultiplier" value="3"/>
+        <!--间隔倍数是否呈指数增加-->
+        <property name="useExponentialBackOff" value="true"/>
+        <property name="destination" ref="queueDestination"/>
+    </bean> 
+    
+    <!--    
+        ActiveMQ为我们提供了一个PooledConnectionFactory，通过往里面注入一个ActiveMQConnectionFactory    
+        可以用来将Connection、Session和MessageProducer池化，这样可以大大的减少我们的资源消耗。    
+        要依赖于 activemq-pool包    
+     -->
+     <!--  
+    <bean id="pooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory">    
+        <property name="connectionFactory" ref="amqConnectionFactory"/>    
+        <property name="maxConnections" value="${mq.pool.maxConnections}"/>    
+    </bean>
+    --> 
+    
+    <!-- 配置JMS连接工厂 -->
+    <bean id="connectionFactory"
+        class="org.springframework.jms.connection.CachingConnectionFactory">
+        <constructor-arg ref="amqConnectionFactory" />
+        <property name="sessionCacheSize" value="100" />
+    </bean>   
+   
+    
+    <!-- 配置JMS模板（Queue），Spring提供的JMS工具类，它发送、接收消息。 -->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="connectionFactory" />
+        <property name="defaultDestination" ref="queueDestination" />
+        <!-- 使 deliveryMode, priority, timeToLive设置生效-->    
+        <property name="explicitQosEnabled" value="true" />
+         <!-- 持久化 如果设置为非持久化MQ服务器重启后MQ中的数据会丢失-->
+        <property name="deliveryPersistent" value="true"/>
+        <property name="receiveTimeout" value="10000" />
+        <!--这里注意:如果不开启事务，消息在异常的情况下是不会重试的-->    
+        <property name="sessionTransacted" value="true"/>
+    </bean>
+    
+    <!-- 消息接收监听器用于异步接收消息-->    
+    <bean id="smsContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">    
+        <property name="connectionFactory" ref="connectionFactory"/>    
+        <property name="destination" ref="queueDestination"/>    
+        <property name="messageListener" ref="couponConsumer"/>    
+        <!--这里注意:如果不开启事务，消息在异常的情况下是不会重试的-->    
+        <property name="sessionTransacted" value="true"/>   
+	    <!-- 设置固定的线程数 -->  
+	    <!--  <property name="concurrentConsumers" value="6"></property> --> 
+	    <!-- 设置动态的线程数 -->  
+	    <!--  <property name="concurrency" value="1-9"></property> --> 
+	    <!-- 设置最大的线程数 -->  
+	    <!--  <property name="maxConcurrentConsumers" value="15"></property> --> 
+    </bean>  
+    <!-- 定义Queue监听器 -->
+    <!--  
+    <jms:listener-container destination-type="queue" container-type="default" connection-factory="connectionFactory" acknowledge="auto">
+        <jms:listener destination="yunpay.payresult" ref="consumerService"/>
+    </jms:listener-container>
+    -->
+ </beans>

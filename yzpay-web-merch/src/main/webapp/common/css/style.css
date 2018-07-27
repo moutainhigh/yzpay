@@ -1,0 +1,480 @@
+.hidden{display:  none;}
+.red{color: red;}
+
+    input::-webkit-input-placeholder, textarea::-webkit-input-placeholder { /* WebKit*/  
+        color:    #666;  
+    }  
+    input:-moz-placeholder, textarea:-moz-placeholder { /* Mozilla Firefox 4 to 18 */  
+        color:    #666;  
+    }  
+    input::-moz-placeholder, textarea::-moz-placeholder { /* Mozilla Firefox 19+ */  
+        color:    #666;  
+    }  
+    input:-ms-input-placeholder, textarea:-ms-input-placeholder { /* IE 10+ */  
+        color:    #666;  
+    }
+
+.aui-bar-nav{
+	background-color: #4768f3;
+}
+.aui-btn-success{
+	background-color: #4768f3;
+}
+.aui-btn-block{
+	border:none;
+}
+.aui-btn-success.aui-active, .aui-btn-success:active{
+	background-color: #4768f3;
+}
+.aui-list .aui-list-item{
+	border-bottom: none;
+}
+/*登录*/
+.login-img{
+	width: 80px;
+	height: 80px;
+	margin: 60px auto 50px;
+}
+.login-img img{
+	width: 100%;
+}
+.login-form{
+	padding: 0 24px;
+}
+.register-form{
+	padding:0 12px;
+}
+.login-form .aui-list-item-label{
+	width: 30%;
+}
+.login-form .aui-list-item-input,
+.register-form .aui-list-item-input{
+	position: relative;
+}
+.password_sh,
+.login-yan-refurbish,
+#obtain-ma{
+	position: absolute;
+	right: 0;
+	top: 10px;
+	width: 1.2rem;
+}
+.login-form .aui-list-item,
+.register-form .aui-list-item{
+	padding-left: 0;
+	display: block;
+}
+.login-form .aui-list-item p,
+.register-form .aui-list-item p{
+	color: #fd4142;
+}
+.login-form .aui-form-list{
+	border-top: none;
+}
+.login-form .aui-list-item-inner{
+	border-bottom: 1px solid #ddd;
+	margin-top: 10px;
+}
+.register-form .aui-list-item .aui-list-item-inner{
+	border-bottom: 1px solid #ddd;
+	padding: 7px 0;
+}
+.login-yan-refurbish{
+	top: 0;
+	bottom: 0;
+	width: 2.3rem;
+	height: 2.2rem;
+	padding: 10px;
+	border:1px solid #ddd;
+	border-bottom: none;
+}
+.login-yan-img{
+	position: absolute;
+	right: 2.3rem;
+	top: 0;
+	width: 4rem;
+	height: 2.2rem;
+	background-color: #ddd;
+}
+.aui-list-item .aui-btn-success{
+	background-color: #4768f3;
+	margin-top: 44px;
+}
+.login-exp{
+	margin-top: 16px;
+}
+#forget-password{
+	float: left;
+}
+#register{
+	float: right;
+}
+#obtain-ma{
+	width: 4rem;
+    height: 1.3rem;
+    line-height: 1.3rem;
+    text-align: center;
+    font-size: 14px;
+    border-color: #4768f3 !important;
+    color: #4768f3 !important;
+    padding: 0;
+}
+
+/*弹窗*/
+.pop-success{
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(0,0,0,.3);
+	z-index: 100;
+	display: none;
+}
+.pop-success-content{
+	position: fixed;
+    width: 14rem;
+    height: 10rem;
+    top: 50%;
+    left: 50%;
+    margin-top: -5rem;
+    margin-left: -7rem;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.pop-success-content-title{
+	font-size: 1.1rem;
+	color: #4768f3;
+	margin: 1.8rem 0 0.8rem;
+}
+.pop-success-content .aui-btn-success{
+	width: 11rem;
+	margin: 0 auto;
+	margin-bottom: 12px;
+}
+.pop-success-content-exp a{
+	color: #666;
+	font-size: 0.7rem;
+	text-decoration:underline;
+}
+
+
+/*身份信息*/
+.aui-tab{
+	border-bottom: 1px solid #ddd;
+}
+.si-aui-list{
+	margin-bottom: 9px;
+}
+.si-aui-tab .aui-tab-item{
+	font-size: 0.8rem;
+}
+.aui-tab-item .aui-active{
+	border-bottom: 2px solid #4768f3;
+	color:#4768f3;
+	display: inline-block;
+	padding: 0 10px;
+	line-height: 2rem;
+}
+.si-aui-list .aui-list-item-inner{
+	border-bottom: 1px solid #f5f5f5;
+	padding-top: 12px;
+	padding-bottom: 12px;
+}
+.si-aui-list li:last-child .aui-list-item-inner{
+	border-bottom: none;
+}
+.si-aui-list .aui-list-item-right{
+	max-width: 70%;
+	font-size: 0.8rem;
+}
+.si-aui-list .aui-list-item-title{
+	font-size: 0.9rem;
+}
+#balance-info,
+#paper-info,
+#date-info{
+	display: none;
+}
+.si-aui-list-exp{
+	font-size: 12px;
+	color: #999;
+	padding: 5px 12px;
+}
+
+/*证件信息*/
+.paper-info-list{
+	float: left;
+	width: 48%;
+	margin-right: 4%;
+	text-align: center;
+	background-color: #fff;
+	margin-bottom: 15px;
+}
+.paper-info-list:nth-child(2n){
+	margin-right: 0;
+}
+.paper-info-title{
+	line-height: 40px;
+	font-size: 14px;
+	color: #666;
+}
+.paper-info-img{
+	height: 126px;
+	overflow: hidden;
+	position: relative;
+}
+.paper-info-img img{
+	width: 100%;
+	height: 126px;
+	background-color: #ccc;
+}
+.paper-info-img input{
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 126px;
+	opacity: 0;
+	z-index: 10;
+}
+.aui-list-item-title i,
+.paper-info-title i{
+	font-style: normal;
+	color: #fd4142;
+	margin-right: 6px;
+}
+.aui-list-item-right select,
+.aui-list-item-right input{
+	height: 1.2rem;
+	color: #999;
+	direction: rtl;
+}
+.aui-list-item-right option{
+	direction: ltr;
+}
+.bb-submit-div .aui-btn-warning{
+	background-color: #ff7b1a !important;
+}
+.aui-row-padded [class*=aui-col-xs-]{
+	padding: 0.75rem;
+}
+
+/*账单详情*/
+.bd-ShopName{
+	color: #333;
+	font-size: 15px;
+}
+.bd-Total div,
+.or-Total div{
+	font-size: 20px;
+}
+.bd-details div,
+.aui-list .or-details{
+	color: #666;
+}
+.bd-Total .aui-list-item-inner div{
+	float: left;
+}
+.bd-Total .aui-list-item-inner div:nth-child(1),
+.bd-Total .aui-list-item-inner div:nth-child(2),
+.bd-details .aui-list-item-inner div:nth-child(1),
+.bd-details .aui-list-item-inner div:nth-child(2){
+	width: 32%;
+}
+.bd-Total .aui-list-item-inner div:nth-child(3){
+	width: 36%;
+	text-align: right;
+	font-size: 22px;
+}
+.bd-details .aui-list-item-inner div:nth-child(3){
+	width: 36%;
+	text-align: right;
+}
+
+/*店员管理*/
+.si-aui-list .cm-AddClerk{
+	color: #4768f3;
+}
+.cm-AddClerk img{
+	display: inline-block;
+	width: 12px;
+    margin-right: 5px;
+}
+.aui-list .list-BigTitle{
+	padding-top: 0.75rem;
+	padding-bottom: 0.75rem;
+}
+.clerk-list .cm-list-item-title div{
+	flex:1;
+}
+.clerk-list .cm-list-item-title{
+	display: flex;
+	flex:1;
+}
+.clerk-list .aui-list-item-right img{
+	margin-left: 30px;
+    width: 1.1rem;
+}
+.clerk-list .aui-list-item-title{
+	color: #666;
+	font-size: 0.8rem;
+}
+.pop-content{
+	height: 137px;
+	text-align: center;
+	font-size: 21px;
+}
+.pop-content img{
+	width: 50px;
+	height: 50px;
+	margin: 0 auto 10px;
+}
+.pop-footer{
+	height: 50px;
+	line-height: 50px;
+	border-top: 1px solid #ddd;
+	display: flex;
+}
+.pop-footer button{
+	flex:1;
+	height: 48px;
+	line-height: 48px;
+	background-color: #fff;
+	border:none;
+	text-align: center;
+	border-radius: 0px;
+	font-size: 16px;
+}
+.pop-footer #KeepOn{
+	color: #666;
+	border-right: 1px solid #ddd;
+}
+.pop-footer #Return-index{
+	color: #4768f3;
+}
+.pop-one-btn{
+	padding: 0 40px;
+}
+.pop-success-content .pop-one-btn button{
+	width: 100%;
+}
+
+/*我的门店*/
+.MyShop-list{
+	margin-bottom: 0.75rem;
+}
+.MyShop-item{
+	padding-left: 0.75rem;
+}
+.MyShop-text{
+	border-bottom: 1px solid #f5f5f5;
+	padding-right: 0.75rem;
+}
+.MyShop-footer{
+	display: inline-block;
+	width: 100%;
+	color: #666;
+	padding: 0.5rem 0.75rem 0.5rem 0;
+}
+.MyShop-footer .MyShop-footer-option{
+	float: right;
+	margin-left: 1.2rem;
+}
+.MyShop-footer img{
+	display: inline-block;
+}
+.MyShop-text .MyShop-shopName{
+	font-size: 20px;
+	color: #333;
+	padding: 0.75rem 0 0.25rem;
+}
+.MyShop-text .MyShop-shopInfo{
+	padding: 0.25rem 0 0.75rem;
+	color: #666;
+}
+.MyShop-shopInfo span:nth-child(2){
+	float: right;
+}
+.MyShop-footer-option img{
+	width: 0.9rem;
+    float: left;
+    margin-right: 7px;
+}
+
+/*营业报表*/
+#stream-info .or-stream-exp{
+	padding-top:6px; 
+}
+#stream-info .or-stream-price{
+	color: #333;
+	font-size: 0.9rem;
+}
+#stream-info .or-stream-state{
+	font-size: 0.8rem;
+}
+#stream-info #stream-state-s{
+	color:#ff7b1a;
+}
+#stream-info #stream-state-f{
+	color: #666;
+}
+.or-stream-exp .aui-list-item-title{
+	color: #999;
+}
+.stream-info-item .aui-media-list-item-inner{
+	border-bottom: 1px solid #f5f5f5;
+}
+.date-info-SelectDate{
+	display: flex;
+}
+.date-info-SelectDate select{
+	background-color: #fff;
+    flex: 1;
+    text-indent: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #e5e5e5;
+}
+.date-info-SelectDate button{
+	margin-left: 10px;
+	line-height: 2.2rem;
+	height: 2.22rem;
+	border: none;
+	color: #fff;
+}
+.date-info-SelectDate #SelectDate-yesterday{
+	background-color: #ff7b1a;
+}
+.date-info-SelectDate #SelectDate-today{
+	background-color: #4768f3;
+}
+.or-Total .aui-list-item-inner div:nth-child(1),
+.or-details .aui-list-item-inner div:nth-child(1){
+	width: 50%;
+}
+.or-Total .aui-list-item-inner div:nth-child(3),
+.or-details .aui-list-item-inner div:nth-child(3){
+	width: 30%;
+	text-align: right;
+}
+.or-Total .aui-list-item-inner div:nth-child(2),
+.or-details .aui-list-item-inner div:nth-child(2){
+	width: 20%
+}
+.or-Total .aui-list-item-inner div:nth-child(3){
+	font-size: 22px;
+}
+.ui-page{
+	width: 100%;
+    display: inline-block;
+    margin: 0;
+    padding: 0.75rem;
+    padding-bottom: 0;
+}
+.ui-exp{
+	font-size: 0.7rem;
+	color: #fd4142;
+	display: inline-block;
+}

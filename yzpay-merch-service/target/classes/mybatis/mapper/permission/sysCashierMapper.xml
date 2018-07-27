@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.h5merch.dao.impl.CheckerDaoImpl">
+	
+	<!--查询收款记录 -->
+	<select id="listPage" parameterType="java.util.Map" resultType="com.yunpay.permission.entity.PayTranLs">
+		select t.user_order_no,t.merchantNo,s.storeName,t.channel,t.transTime,t.transPrice,t.totalPrice,t.status,t.attach,s.storeNo,t.transNum,
+		t.cashierNo,tmu.userName cashier from t_pay_tran_ls t 
+		left join t_merchant m on m.merchantNo = t.merchantNo
+		left join t_store_machine tsm on tsm.machineNo = t.terminalNum
+		inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+		left join t_merchant_user tmu on tmu.loginName = t.cashierNo
+		where (t.status = '2' or t.status = '3' or t.status = '6') and t.merchantNo = #{merchantNo}
+		<!-- 店长角色查询自己门店所有收银员的交易流水 -->
+		<if test="userType == '2'.toString()">
+			and s.storeNo=#{storeNo} 
+		</if>
+		<!-- 收银员角色查询自己门店下自己的交易流水 -->
+		<if test="userType == '3'.toString()">
+			and t.cashierNo = #{cashierNo} and tsm.machineNo =#{machineNo}
+		</if>
+		order by t.transTime desc
+		limit #{pageIndex},#{pageSize}
+	</select>
+	
+	
+	<!-- 查询收款记录总记录数 -->
+	<select id="listPageCount" parameterType="java.util.Map" resultType="int">
+	 select count(*) from(
+	 	select t.user_order_no,t.merchantNo,s.storeName,t.channel,t.transTime,t.transPrice,t.totalPrice,t.status, s.storeNo,t.transNum from t_pay_tran_ls t 
+		left join t_merchant m on m.merchantNo = t.merchantNo
+		left join t_store_machine tsm on tsm.machineNo = t.terminalNum
+		inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+		left join t_merchant_user tmu on tmu.loginName = t.cashierNo
+		where (t.status = '2' or t.status = '3' or t.status = '6') and t.merchantNo = #{merchantNo}
+		<!-- 店长角色查询自己门店所有收银员的交易流水 -->
+		<if test="userType == '2'.toString()">
+			and s.storeNo=#{storeNo} 
+		</if>
+		<!-- 收银员角色查询自己门店下自己的交易流水 -->
+		<if test="userType == '3'.toString()">
+			and t.cashierNo = #{cashierNo} and tsm.machineNo =#{machineNo}
+		</if>
+	 ) a
+	</select>
+	
+	<!-- 查询收款记录明细 -->
+	<select id="listByColumn" parameterType="java.util.Map" resultType="com.yunpay.permission.entity.PayTranLs">
+		select t.transPrice,t.totalPrice, t.user_order_no,s.storeName,tmu.userName cashier,t.transTime,t.`status`,t.cashierNo,tmu.userName cashier from t_pay_tran_ls t 
+		left join t_merchant m on m.merchantNo = t.merchantNo
+		left join t_store_machine tsm on tsm.machineNo = t.terminalNum
+		inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+		left join t_merchant_user tmu on tmu.loginName = t.cashierNo
+		where t.merchantNo = #{merchantNo} and t.transNum=#{transNum}
+	</select>
+	
+	
+	<!-- 分页查询营业日报 -->
+	<select id="listReport" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">
+			select '总计' storeName,'' storeNo,'' merchantNo,sum(h.countTran) countTran,sum(h.sumTran) sumTran  from(
+					select a.* from(
+						select ts.storeName,ts.storeNo,tptl.merchantNo,count(0) countTran,sum(transPrice) sumTran from t_pay_tran_ls tptl
+						left join t_merchant m on m.merchantNo = tptl.merchantNo
+						left join t_store_machine tsm on tsm.machineNo = tptl.terminalNum
+						inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+						where tptl.merchantNo=#{merchantNo} and tptl.status = '2'
+						<if test="userType == '2'.toString()">
+							and ts.storeNo=#{storeNo} 
+						</if>
+						<!-- 收银员角色查询自己门店下自己的交易流水 -->
+						<if test="userType == '3'.toString()">
+							and tptl.cashierNo = #{cashierNo} and tsm.machineNo =#{machineNo}
+						</if>
+						and tptl.transTime BETWEEN STR_TO_DATE(#{transTime},"%Y-%m-%d") AND STR_TO_DATE(#{transTime},"%Y-%m-%d")+1
+						group by ts.storeNo,ts.storeName,tptl.merchantNo
+					)a
+			) h
+			UNION
+			select ts.storeName,ts.storeNo,tptl.merchantNo,count(0) countTran,sum(transPrice) sumTran from t_pay_tran_ls tptl
+			left join t_merchant m on m.merchantNo = tptl.merchantNo
+			left join t_store_machine tsm on tsm.machineNo = tptl.terminalNum
+			inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+			where tptl.merchantNo=#{merchantNo} and tptl.status = '2'
+			<if test="userType == '2'.toString()">
+					and ts.storeNo=#{storeNo} 
+			</if>
+			<!-- 收银员角色查询自己门店下自己的交易流水 -->
+			<if test="userType == '3'.toString()">
+					and tptl.cashierNo = #{cashierNo} and tsm.machineNo =#{machineNo}
+			</if>
+			and tptl.transTime BETWEEN STR_TO_DATE(#{transTime},"%Y-%m-%d") AND STR_TO_DATE(#{transTime},"%Y-%m-%d")+1
+			group by ts.storeNo,ts.storeName,tptl.merchantNo
+			limit #{pageIndex},#{pageSize}
+	</select>
+	
+	<!-- 查询营业日报总记录 -->
+	<select id="countReport" parameterType="java.util.Map" resultType="int">
+		select count(*) from(
+			select ts.storeName,ts.storeNo,tptl.merchantNo,count(0) countTran,sum(transPrice) sumTran from t_pay_tran_ls tptl
+			left join t_merchant m on m.merchantNo = tptl.merchantNo
+			left join t_store_machine tsm on tsm.machineNo = tptl.terminalNum
+			inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+			where tptl.merchantNo=#{merchantNo} and tptl.status = '2'
+			<if test="userType == '2'.toString()">
+					and ts.storeNo=#{storeNo} 
+			</if>
+			<!-- 收银员角色查询自己门店下自己的交易流水 -->
+			<if test="userType == '3'.toString()">
+					and tptl.cashierNo = #{cashierNo} and tsm.machineNo =#{machineNo}
+			</if>
+			and tptl.transTime BETWEEN STR_TO_DATE(#{transTime},"%Y-%m-%d") AND STR_TO_DATE(#{transTime},"%Y-%m-%d")+1
+			group by ts.storeNo,ts.storeName,tptl.merchantNo
+		) a
+	</select>
+	
+	<!-- 查询营业日报明细 -->
+	<select id="reportDetail" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">
+			select '总计' channel,sum(h.countTran) countTran,sum(h.sumTran) sumTran from(
+				select a.* from(
+					select tptl.channel,count(0) countTran,sum(transPrice) sumTran from t_pay_tran_ls tptl
+					left join t_merchant m on m.merchantNo = tptl.merchantNo
+					left join t_store_machine tsm on tsm.machineNo = tptl.terminalNum
+					inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+					where tptl.merchantNo=#{merchantNo} and ts.storeNo=#{storeNo} 
+					and tptl.transTime BETWEEN STR_TO_DATE(#{transTime},"%Y-%m-%d") AND STR_TO_DATE(#{transTime},"%Y-%m-%d")+1
+					and tptl.status = '2'
+					<if test="userType == '2'.toString()">
+						and ts.storeNo=#{storeNo} 
+					</if>
+					<!-- 收银员角色查询自己门店下自己的交易流水 -->
+					<if test="userType == '3'.toString()">
+						and tptl.cashierNo = #{cashierNo} and tsm.machineNo =#{machineNo}
+					</if>
+					group by tptl.channel
+				) a
+			) h
+			UNION
+			select tptl.channel,count(0) countTran,sum(transPrice) sumTran from t_pay_tran_ls tptl
+				left join t_merchant m on m.merchantNo = tptl.merchantNo
+				left join t_store_machine tsm on tsm.machineNo = tptl.terminalNum
+				inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+				where tptl.merchantNo=#{merchantNo} and ts.storeNo=#{storeNo} 
+				and tptl.transTime BETWEEN STR_TO_DATE(#{transTime},"%Y-%m-%d") AND STR_TO_DATE(#{transTime},"%Y-%m-%d")+1
+				and tptl.status = '2'
+				<if test="userType == '2'.toString()">
+					and ts.storeNo=#{storeNo} 
+				</if>
+				<!-- 收银员角色查询自己门店下自己的交易流水 -->
+				<if test="userType == '3'.toString()">
+					and tptl.cashierNo = #{cashierNo} and tsm.machineNo =#{machineNo}
+				</if>
+				group by tptl.channel
+	</select>
+	
+	
+	<!-- 按时间段输出日交易图形报表数据 -->
+	<select id="printDayReport" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">
+		select t.transTime,sum(t.sumTran) sumTran from(
+			select s.transTime, sum(s.sumTran) sumTran from(
+				select a.transTime,a.sumTran from(
+					select date_format(t.transTime, '%H') transTime,sum(t.transPrice) sumTran from t_pay_tran_ls t
+					left join t_merchant m on m.merchantNo = t.merchantNo
+					left join t_store_machine tsm on tsm.machineNo = t.terminalNum
+					inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+					
+					where t.merchantNo = #{merchantNo}  
+					and t.transTime BETWEEN STR_TO_DATE(#{transTime},"%Y-%m-%d") AND STR_TO_DATE(#{transTime},"%Y-%m-%d")+1 and t.status = '2'
+					<if test="userType == '2'.toString()">
+						and s.storeNo=#{storeNo} 
+					</if>
+					<!-- 收银员角色查询自己门店下自己的交易流水 -->
+					<if test="userType == '3'.toString()">
+						and t.cashierNo = #{cashierNo} and tsm.machineNo =#{machineNo}
+					</if>
+					group by date_format(t.transTime, '%H')
+				) a
+			) s group by s.transTime
+			union select '00',0
+			union select '01',0
+			union select '02',0
+			union select '03',0
+			union select '04',0
+			union select '05',0
+			union select '06',0
+			union select '07',0
+			union select '08',0
+			union select '09',0
+			union select '10',0
+			union select '11',0
+			union select '12',0
+			union select '13',0
+			union select '14',0
+			union select '15',0
+			union select '16',0
+			union select '17',0
+			union select '18',0
+			union select '19',0
+			union select '20',0
+			union select '21',0
+			union select '22',0
+			union select '23',0
+		) t GROUP BY t.transTime  having t.transTime is not null  order by t.transTime
+	</select>
+	
+	<!-- 按时间段查询某个商户的总交易笔数、总交易金额 -->
+	<select id="sumTrans" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">	
+		select t.merchantNo, count(t.transNum) countTran,sum(t.transPrice) sumTran from t_pay_tran_ls t 
+		left join t_merchant m on m.merchantNo = t.merchantNo
+		left join t_store_machine tsm on tsm.machineNo = t.terminalNum
+		inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+		
+		where t.merchantNo = #{merchantNo} 
+		and t.transTime BETWEEN STR_TO_DATE(#{transTime},"%Y-%m-%d") AND STR_TO_DATE(#{transTime},"%Y-%m-%d")+1
+		and t.status = '2'
+		<if test="userType == '2'.toString()">
+			and s.storeNo=#{storeNo} 
+		</if>
+		<!-- 收银员角色查询自己门店下自己的交易流水 -->
+		<if test="userType == '3'.toString()">
+			and t.cashierNo = #{cashierNo} and tsm.machineNo =#{machineNo}
+		</if>
+	</select>
+	
+	
+	
+	<!-- 按日查询某个商户的总交易笔数、总交易金额 -->
+	<select id="sumTransByDay" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">	
+		select t.merchantNo,count(t.transNum) countTran,sum(t.transPrice) sumTran from t_pay_tran_ls t 
+		left join t_merchant m on m.merchantNo = t.merchantNo
+		left join t_store_machine tsm on tsm.machineNo = t.terminalNum
+		inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+		
+		where t.merchantNo = #{merchantNo} 
+		and t.transTime BETWEEN STR_TO_DATE(#{transTime},'%Y-%m-%d') and STR_TO_DATE(now(),'%Y-%m-%d') +1
+		and t.status = '2'
+		<if test="userType == '2'.toString()">
+			and s.storeNo=#{storeNo} 
+		</if>
+		<!-- 收银员角色查询自己门店下自己的交易流水 -->
+		<if test="userType == '3'.toString()">
+			and t.cashierNo = #{cashierNo} and tsm.machineNo =#{machineNo}
+		</if>
+	</select>
+	
+	<!-- 按周查询某个商户的总交易笔数、总交易金额 -->
+	<select id="sumTransByWeek" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">	
+		select t.merchantNo,count(t.transNum) countTran,sum(t.transPrice) sumTran from t_pay_tran_ls t 
+		left join t_merchant m on m.merchantNo = t.merchantNo
+		left join t_store_machine tsm on tsm.machineNo = t.terminalNum
+		inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+		
+		where t.merchantNo = #{merchantNo} 
+		and t.transTime BETWEEN STR_TO_DATE(#{transTime},'%Y-%m-%d') and STR_TO_DATE(#{monday},'%Y-%m-%d') +1
+		and t.status = '2'
+		<if test="userType == '2'.toString()">
+			and s.storeNo=#{storeNo} 
+		</if>
+		<!-- 收银员角色查询自己门店下自己的交易流水 -->
+		<if test="userType == '3'.toString()">
+			and t.cashierNo = #{cashierNo} and tsm.machineNo =#{machineNo}
+		</if>
+	</select>
+	
+	<!-- 按月查询某个商户的总交易笔数、总交易金额 -->     
+	<select id="sumTransByMonth" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">	
+		select t.merchantNo,count(t.transNum) countTran,sum(t.transPrice) sumTran from t_pay_tran_ls t 
+		left join t_merchant m on m.merchantNo = t.merchantNo
+		left join t_store_machine tsm on tsm.machineNo = t.terminalNum
+		inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+		
+		where t.merchantNo = #{merchantNo} 
+		and t.transTime BETWEEN STR_TO_DATE(#{transTime},'%Y-%m-%d') and STR_TO_DATE(#{nowMonth},'%Y-%m-%d') +1
+		and t.status = '2'
+		<if test="userType == '2'.toString()">
+			and s.storeNo=#{storeNo} 
+		</if>
+		<!-- 收银员角色查询自己门店下自己的交易流水 -->
+		<if test="userType == '3'.toString()">
+			and t.cashierNo = #{cashierNo} and tsm.machineNo =#{machineNo}
+		</if>
+	</select>
+	
+	
+	
+	<!-- 查询按日交易的报表 -->
+	<select id="printReportByDay" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">
+	select a.transTime,sum(a.sumTran) sumTran from (
+		select s.transTime, sum(s.sumTran) sumTran from(
+					SELECT date_format(t.transTime,'%Y.%m.%d') transTime, sum(t.transPrice) sumTran FROM t_pay_tran_ls t 
+					left join t_merchant m on m.merchantNo = t.merchantNo
+					left join t_store_machine tsm on tsm.machineNo = t.terminalNum
+					inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+					
+					where t.merchantNo = #{merchantNo} 
+					and t.transTime BETWEEN STR_TO_DATE(#{transTime},'%Y-%m-%d') and STR_TO_DATE(now(),'%Y-%m-%d') +1
+					and t.`status`='2' 
+					<if test="userType == '2'.toString()">
+					and s.storeNo=#{storeNo} 
+					</if>
+					<!-- 收银员角色查询自己门店下自己的交易流水 -->
+					<if test="userType == '3'.toString()">
+					and t.cashierNo = #{cashierNo} and tsm.machineNo =#{machineNo}
+					</if>
+					GROUP BY date_format(t.transTime, '%Y.%m.%d')
+			
+		) s GROUP BY s.transTime
+		union
+		<foreach collection="unionDate" item="_date" index="index" separator="union">
+			 select #{_date},0
+		</foreach>
+	) a  GROUP BY a.transTime having a.transTime is not null  order by a.transTime 
+	</select>
+	
+	<!-- 查询按周交易的报表 -->
+	<select id="printReportByWeek" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">
+	select a.transTime,sum(a.sumTran) sumTran from (
+		select s.transTime, sum(s.sumTran) sumTran from(
+				SELECT date_format(t.transTime,'%Y.%m.%d') transTime, sum(t.transPrice) sumTran FROM t_pay_tran_ls t
+				left join t_merchant m on m.merchantNo = t.merchantNo
+				left join t_store_machine tsm on tsm.machineNo = t.terminalNum
+				inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+			
+				where t.merchantNo = #{merchantNo} 
+				and t.transTime BETWEEN STR_TO_DATE(#{transTime},'%Y-%m-%d') and STR_TO_DATE(#{monday},'%Y-%m-%d') +1
+				and t.`status`='2'
+				<if test="userType == '2'.toString()">
+				and s.storeNo=#{storeNo} 
+				</if>
+				<!-- 收银员角色查询自己门店下自己的交易流水 -->
+				<if test="userType == '3'.toString()">
+				and t.cashierNo = #{cashierNo} and tsm.machineNo =#{machineNo}
+				</if>
+				GROUP BY date_format(t.transTime,'%Y.%m.%d')
+		) s  GROUP BY s.transTime
+		union
+		<foreach collection="unionDate" item="_date" index="index" separator="union">
+			 select #{_date},0
+		</foreach>
+	) a  GROUP BY a.transTime having a.transTime is not null  order by a.transTime 
+	</select>
+	
+	<!-- 查询按月交易的报表 -->
+	<select id="printReportByMonth" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">
+	select a.transTime,sum(a.sumTran) sumTran from (
+		select s.transTime, sum(s.sumTran) sumTran from(
+				SELECT date_format(t.transTime,'%Y.%m') transTime, sum(t.transPrice) sumTran FROM t_pay_tran_ls t 
+				left join t_merchant m on m.merchantNo = t.merchantNo
+				left join t_store_machine tsm on tsm.machineNo = t.terminalNum
+				inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+				
+				where t.merchantNo = #{merchantNo} 
+				and t.`status`='2'
+				<![CDATA[   
+		 		and  t.transTime >= STR_TO_DATE(#{transTime},'%Y-%m') and t.transTime < STR_TO_DATE(#{transTime2},'%Y-%m')
+		 		]]> 
+				<if test="userType == '2'.toString()">
+				and s.storeNo=#{storeNo} 
+				</if>
+				<!-- 收银员角色查询自己门店下自己的交易流水 -->
+				<if test="userType == '3'.toString()">
+				and t.cashierNo = #{cashierNo} and tsm.machineNo =#{machineNo}
+				</if>
+				GROUP BY date_format(t.transTime,'%Y.%m')
+		) s  GROUP BY s.transTime
+		union
+		<foreach collection="unionDate" item="_date" index="index" separator="union">
+			 select #{_date},0
+		</foreach>
+	) a  GROUP BY a.transTime having a.transTime is not null  order by a.transTime 
+	</select>
+	
+	<!-- 获取招手猫app商户数据,并同步到商户用户表中 -->
+	<insert id="syncUser" parameterType="java.util.Map">
+		insert into	t_merchant_user
+		(	userName,loginName,	loginPwd,phone,userType,merchantNo,storeNo,userStatus,createTime,orgNo,pwdSalt)
+		values
+		(	#{userName,jdbcType=VARCHAR},#{loginName,jdbcType=VARCHAR},#{loginPwd,jdbcType=VARCHAR},
+			#{phone,jdbcType=VARCHAR},#{userType,jdbcType=CHAR},#{merchantNo,jdbcType=VARCHAR},
+			#{storeNo,jdbcType=VARCHAR},#{userStatus,jdbcType=CHAR},now(),
+			#{orgNo,jdbcType=VARCHAR},#{pwdSalt,jdbcType=VARCHAR})		
+	</insert>
+	
+	<!-- 查询账号是否锁定 -->
+	<select id="isLock" parameterType="java.util.Map" resultType="java.util.Map">
+		select t.loginFailCount from t_login_fail_record t where t.userId = (select u.id from t_merchant_user u where u.loginName= #{loginName})
+	</select>
+	
+	<!--  更新用户的账号登录失败记录 -->
+	<update id="updateLoginRecord" parameterType="java.util.Map" >
+		update t_login_fail_record t set t.loginFailDate = #{loginFailDate},t.loginFailCount = #{loginFailCount} where id=#{id}
+	</update>
+	
+	<!-- 保存用户的账号登录失败记录 -->
+	<insert id="saveErrorRecord" parameterType="java.util.Map">
+		insert into t_login_fail_record (userId,loginFailDate,loginFailCount) values (#{userId},#{loginFailDate},#{loginFailCount})
+	</insert>
+	
+	<!-- 获取未锁定的用户当日的登录失败的记录,包括(userid,登录日期、失败次数) -->
+	<select id="getUserLoginFailRecord" parameterType="java.util.Map" resultType="com.yunpay.permission.entity.LoginFailRecord">
+		select * from t_login_fail_record t where t.userId = (select u.id from t_merchant_user u where u.loginName = #{phone})
+		and t.loginFailDate = #{loginFailDate}
+	</select>
+	
+	<!-- 删除用户的账号登录失败记录 -->
+	<delete id="delLoginRecord" parameterType="java.lang.String">
+	delete from t_login_fail_record where userId=(select u.id from t_merchant_user u where u.loginName=#{loginName})
+	</delete>
+
+</mapper>

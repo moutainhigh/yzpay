@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.permission.dao.impl.AddressDaoImpl">
+	<!-- 获取所有的省市区数据 -->
+	<select id="getAllRegion"  resultType="com.yunpay.permission.entity.Address">
+		select id,name,pid,type from t_region order by id
+	</select>
+	
+	<!-- 查询省信息 -->
+	<select id="getProvList"  resultType="com.yunpay.permission.entity.Address">
+		select id,name,pid,type from t_region where pid = 0 order by id
+	</select>
+
+	<!-- 查询市信息 -->
+	<select id="getNextList" parameterType="java.lang.Integer" resultType="com.yunpay.permission.entity.Address">
+		select id,name,pid,type from t_region where pid = #{id} order by id
+	</select>
+
+	<!-- 根据id查询-->
+	<select id="getById" parameterType="java.lang.Integer" resultType="com.yunpay.permission.entity.Address">		
+		select id,name,pid,type from t_region where id=#{id}		
+	</select>
+</mapper>

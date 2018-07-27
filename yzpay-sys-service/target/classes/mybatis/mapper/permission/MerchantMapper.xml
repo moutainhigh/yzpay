@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.permission.dao.impl.MerchDaoImpl">
+
+	<select id="queryMerchById" parameterType="String" resultType="com.yunpay.permission.entity.Merchant">
+		select * from
+		t_merchant
+		where id = #{merchId}
+	</select>
+	<!-- 获取所有的省市区数据 -->
+	<select id="getAllProv"  resultType="com.yunpay.permission.entity.Address">
+		select * from t_region order by id
+	</select>
+	<!-- 查询省信息 -->
+	<select id="getProvince"  resultType="com.yunpay.permission.entity.Address">
+		select * from t_region where type = 0 order by id
+	</select>
+	<!-- 查询市信息 -->
+	<select id="getCity" parameterType="java.lang.Integer" resultType="com.yunpay.permission.entity.Address">
+		select * from t_region where pid = #{id} order by id
+	</select>
+	<!-- 查询区信息 -->
+	<select id="getArea" parameterType="java.lang.Integer" resultType="com.yunpay.permission.entity.Address">
+		select * from t_region where pid = #{id} order by id
+	</select>
+	<!-- 商户分页查询 -->
+	<select id="listPage" parameterType="java.util.Map" resultType="com.yunpay.permission.entity.Merchant">
+		select t.*,a.name industryType,count(s.merId) storeCount from t_merchant t 
+		left join t_merchant_industry a on a.id = t.industryTypeId
+		left join t_store s on s.merId = t.id
+		where 1=1
+		<if test="merchantNo != null">
+			and t.merchantNo like concat(concat('%',#{merchantNo}),'%')
+		</if>
+		<if test="registerName != null">
+			and t.registerName like concat(concat('%',#{registerName}),'%')
+		</if>
+		<if test="cardName != null">
+			and t.cardName like concat(concat('%',#{cardName}),'%')
+		</if>
+		<if test="tel != null">
+			and t.tel like concat(concat('%',#{tel}),'%')
+		</if>
+		<if test="prov != null">
+			and t.prov= #{prov}
+		</if>
+		<if test="city != null">
+			and t.city= #{city}
+		</if>
+		<if test="area != null">
+			and t.area= #{area}
+		</if>
+			group by t.id order by t.createdAt desc
+			limit #{pageIndex},#{pageSize}
+			
+		<![CDATA[]]>
+	</select>
+	<!-- 根据条件查询商户信息 -->
+	<select id="listBy" parameterType="java.util.Map" resultType="com.yunpay.permission.entity.Merchant">
+		select 0 id,t.merchantNo,t.registerName,t.agentSerialNo,t.md5Key,t.contactMan,t.tel,t.prov,t.city,
+		t.area,t.address,t.status,
+		(case when t.auditStatus = 0 then '未认证' when t.auditStatus = 1 then '已认证' when t.auditStatus = 2 then '认证中' when t.auditStatus = 3 then '认证中' end)  auditStatusStr,
+		(case when t.infoFrom = '1' then '平台系统' when t.infoFrom = '2' then '代理商系统' end) infoFrom,a.name industryType,count(s.merId) storeCount,date_format(t.createdAt, '%Y-%m-%d %H:%i:%S') createdAt
+		from t_merchant t 
+		left join t_merchant_industry a on a.id = t.industryTypeId
+		left join t_store s on s.merId = t.id
+		where 1=1
+		<if test="merchantNo != null">
+			and t.merchantNo like concat(concat('%',#{merchantNo}),'%')
+		</if>
+		<if test="registerName != null">
+			and t.registerName like concat(concat('%',#{registerName}),'%')
+		</if>
+		<if test="contactMan != null">
+			and t.contactMan like concat(concat('%',#{contactMan}),'%')
+		</if>
+		<if test="tel != null">
+			and t.tel like concat(concat('%',#{tel}),'%')
+		</if>
+		<if test="prov != null">
+			and t.prov= #{prov}
+		</if>
+		<if test="city != null">
+			and t.city= #{city}
+		</if>
+		<if test="area != null">
+			and t.area= #{area}
+		</if>
+			group by t.id
+		<![CDATA[]]>
+	</select>
+	
+		<!-- 获取 商户基本信息、结算信息、证件信息 -->
+	<select id="getMerchInfo" parameterType="java.lang.String" resultType="com.yunpay.permission.entity.MerchInfo">
+		SELECT t.merchantNo,t.merchantName,t.registerName,t.prov,t.city,t.area,t.address,t.cardName,
+		t.cardNo,d.`name` industry,t.tel,t.email,m.accBank,m.prov accProv,m.city accCity,
+		m.accSubBank,m.accName,m.accNo,a.cardNo attach1,a.cardBackNo attach2,a.busiLicense attach3,
+		a.cyLicense attach4,a.merLogo attach5, s.savePath identityCardNo,s2.savePath identityCardNo2,
+		s3.savePath busiLicense,s4.savePath cyLicense,s5.savePath merLogo
+		FROM t_merchant t
+		left join t_merchant_industry d on t.industryTypeId = d.id
+		left join t_merchant_acc m ON t.id = m.merId
+		left join t_merchant_attach a on m.merid = a.merid
+		left join t_sys_attach s on a.cardno = s.id
+		left join t_sys_attach s2 on a.cardbackno = s2.id
+		left join t_sys_attach s3 on a.busilicense = s3.id
+		left join t_sys_attach s4 on a.cylicense = s4.id
+		left join t_sys_attach s5 on a.merlogo = s5.id
+		where
+		t.merchantNo = #{merchantNo}
+	</select>
+	
+	<!-- 查询是否进行了微信配置 -->
+	<select id="isConfigWechat" parameterType="java.lang.String" resultType="com.yunpay.permission.entity.WechatConfig">
+		select * from t_wechat_config where merchantNo = (select t.merchantNo from t_merchant t where t.merchantNo=#{merchantNo} limit 1);
+	</select>
+	<!-- 查询是否进行了支付宝配置 -->
+	<select id="isConfigAlipay" parameterType="java.lang.String" resultType="com.yunpay.permission.entity.AlipayConfig">
+		select * from t_alipay_config where merchantNo = (select t.merchantNo from t_merchant t where t.merchantNo=#{merchantNo} limit 1);
+	</select>
+	<!-- 查询微信配置 -->
+	<select id="queryWechatConfig" parameterType="java.lang.String" resultType="com.yunpay.permission.entity.WechatConfig">
+		select * from t_wechat_config where merchantNo = (select t.merchantNo from t_merchant t where t.merchantNo=#{merchantNo})
+	</select>
+	<!-- 查询微信服务商 -->
+	<select id="getParent" parameterType="java.lang.Integer" resultType="com.yunpay.permission.entity.WechatConfig">
+		select * from t_wechat_config where mchType = #{mchType}
+	</select>
+	<!-- 查询支付宝配置 -->
+	<select id="queryAlipayConfig" parameterType="java.lang.String" resultType="com.yunpay.permission.entity.AlipayConfig">
+		select * from t_alipay_config where merchantNo = (select t.merchantNo from t_merchant t where t.merchantNo=#{merchantNo})
+	</select>
+	<!-- 更新支付宝配置 -->
+	<update id="updateAlipayConfig" parameterType="com.yunpay.permission.entity.WechatConfig">
+		update t_alipay_config set 
+		storeAppId=#{storeAppId},appId=#{appId} ,pid=#{pid},alipayPublicKey=#{alipayPublicKey},merchantPrivateKey=#{merchantPrivateKey},
+		storeMerchantPublicKey=#{storeMerchantPublicKey},storeAppPublicKey=#{storeAppPublicKey},alipassPublicKey=#{alipassPublicKey},
+		storeAppPrivateKey=#{storeAppPrivateKey},merchantNo=#{merchantNo} 
+		where id =#{id} 
+	</update>	
+	<!-- 更新微信配置 -->
+	<update id="updateWechatConfig" parameterType="com.yunpay.permission.entity.WechatConfig" >
+		update t_wechat_config set 
+		appId=#{appId},mchId=#{mchId},parentMchNo=#{parentMchNo},wxAppAppId=#{wxAppAppId},wxAppApiSecret=#{wxAppApiSecret}, 
+		apiSecret=#{apiSecret},appSecret=#{appSecret},certPassword=#{certPassword},status=#{status} 
+		where id=#{id}
+	</update>
+	<!-- 新增支付宝配置 -->
+	<insert id="saveAlipayConfig" parameterType="com.yunpay.permission.entity.WechatConfig">
+		insert into t_alipay_config (storeAppId,appId,pid,alipayPublicKey,merchantPrivateKey,storeMerchantPublicKey,storeAppPublicKey,alipassPublicKey,
+		storeAppPrivateKey,pagentId,merchantNo,orgNo) 
+		values (#{storeAppId},#{appId},#{pid},#{alipayPublicKey},#{merchantPrivateKey},#{storeMerchantPublicKey},#{storeAppPublicKey},#{alipassPublicKey},
+		#{storeAppPrivateKey},#{pagentId},#{merchantNo},'test')
+	</insert>
+	<!-- 新增微信配置 -->
+	<insert id="saveWechatConfig" parameterType="com.yunpay.permission.entity.WechatConfig">
+		insert into t_wechat_config (appId,mchId,mchType,parentMchNo, wxAppAppId,wxAppApiSecret,apiSecret,appSecret,certLocalPath,certPassword,status,merchantNo,orgNo)
+		 values (#{appId},#{mchId},#{mchType},#{parentMchNo},#{wxAppAppId},#{wxAppApiSecret},#{apiSecret},#{appSecret},#{certLocalPath},#{certPassword},#{status},#{merchantNo},'test');
+	</insert>
+	<!-- 查询总记录数 -->
+	<select id="listPageCount" parameterType="java.util.Map" resultType="int">
+		SELECT count(id) FROM t_merchant t
+		where 1=1
+		<if test="serialNo != null">
+			and t.merchantNo like concat(concat('%',#{serialNo}),'%')
+		</if>
+		<if test="registerName != null">
+			and t.registerName like concat(concat('%',#{registerName}),'%')
+		</if>
+		<if test="contactMan != null">
+			and t.contactMan like concat(concat('%',#{contactMan}),'%')
+		</if>
+		<if test="tel != null">
+			and t.tel like concat(concat('%',#{tel}),'%')
+		</if>
+		<if test="prov != null">
+			and t.prov= #{prov}
+		</if>
+		<if test="city != null">
+			and t.city= #{city}
+		</if>
+		<if test="area != null">
+			and t.area= #{area}
+		</if>
+	</select>
+	
+	<!-- 更新商户信息 -->
+	<update id="update" parameterType="com.yunpay.permission.entity.Merchant">
+		update t_merchant t set
+		<if test="merchantName != null">
+			 t.merchantName=#{merchantName},
+		</if>
+		<if test="address != null">
+			 t.address=#{address},
+		</if>
+		<if test="tel != null">
+			 t.tel=#{tel},	
+		</if>
+		<if test="email != null">
+			 t.email=#{email},
+		</if>
+		<if test="auditStatus != null">
+			 t.auditStatus=#{auditStatus},
+		</if>
+		<if test="auditMemo != null">
+			 t.auditMemo=#{auditMemo}
+		</if>
+		 where merchantNo=#{merchantNo}
+	</update>
+	
+	<!-- 修改商户状态 -->
+	<update id="updateStatus" parameterType="com.yunpay.permission.entity.Merchant">
+		update
+		t_merchant
+		<set>
+			status = #{status}
+		</set>
+		where id =#{id}
+	</update>
+	
+	<!-- 根据商户号删除数据 -->
+	<delete id="deleteMerch" parameterType="java.util.Map" >
+		update
+		t_merchant
+		<set>
+			status='05'
+		</set>
+		where id = #{id}
+	</delete>
+	
+
+</mapper>

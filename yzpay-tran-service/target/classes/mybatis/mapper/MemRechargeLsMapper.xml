@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunpay.serv.dao.MemRechargeLsDao" >
+  <resultMap id="BaseResultMap" type="com.yunpay.serv.model.MemberRechargeLs" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+	<result column="source" property="source" jdbcType="VARCHAR" />
+	<result column="userCardCode" property="userCardCode" jdbcType="VARCHAR" />
+	<result column="memberName" property="memberName" jdbcType="VARCHAR" />
+	<result column="rechargeOrderNo" property="chargeOrderNo" jdbcType="VARCHAR" />
+	<result column="transNum" property="transNum" jdbcType="VARCHAR" />
+	<result column="rechargeAmt" property="chargeAmt" jdbcType="REAL" />
+    <result column="giveAmt" property="giveAmt" jdbcType="REAL" />
+    <result column="beforeAmt" property="beforeAmt" jdbcType="REAL" />
+    <result column="afterAmt" property="afterAmt" jdbcType="REAL" />
+    <result column="payType" property="payType" jdbcType="INTEGER" />
+    <result column="createdAt" property="createdAt" jdbcType="TIMESTAMP" />
+    <result column="rechargeStatus" property="chargeStatus" jdbcType="INTEGER" />
+    <result column="payNum" property="payNum" jdbcType="VARCHAR" />
+    <result column="merchantNo" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="termNo" property="termNo" jdbcType="VARCHAR" />
+    <result column="cashierNo" property="cashierNo" jdbcType="VARCHAR" />
+    <result column="info" property="info" jdbcType="VARCHAR" />
+    <result column="orgNo" property="orgNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="table_name">t_member_recharge_ls</sql>
+  
+  <sql id="Base_Column_List" >
+    id, source, userCardCode, memberName, rechargeOrderNo, transNum, rechargeAmt, giveAmt, 
+    beforeAmt, afterAmt, payType, createdAt, rechargeStatus, payNum, merchantNo, 
+    termNo, cashierNo, info, orgNo
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from <include refid="table_name" />
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from <include refid="table_name" />
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="com.yunpay.serv.model.MemberRechargeLs" useGeneratedKeys="true" keyProperty="id">
+    insert into <include refid="table_name" /> (id,source,userCardCode,memberName,rechargeOrderNo,transNum,
+    rechargeAmt,giveAmt,beforeAmt,afterAmt,payType,createdAt,rechargeStatus,payNum,
+    merchantNo,termNo,cashierNo,info,orgNo)
+    values (#{id,jdbcType=INTEGER}, #{source,jdbcType=VARCHAR}, 
+      #{userCardCode,jdbcType=VARCHAR}, #{memberName,jdbcType=VARCHAR}, #{rechargeOrderNo,jdbcType=VARCHAR}, 
+      #{transNum,jdbcType=VARCHAR}, #{rechargeAmt,jdbcType=REAL}, #{giveAmt,jdbcType=REAL}, 
+      #{beforeAmt,jdbcType=REAL}, #{afterAmt,jdbcType=REAL}, #{payType,jdbcType=INTEGER}, 
+      #{createdAt,jdbcType=TIMESTAMP}, #{rechargeStatus,jdbcType=INTEGER}, #{payNum,jdbcType=VARCHAR}, 
+      #{merchantNo,jdbcType=VARCHAR}, #{termNo,jdbcType=VARCHAR}, #{cashierNo,jdbcType=VARCHAR}, 
+      #{info,jdbcType=VARCHAR}, #{orgNo,jdbcType=VARCHAR})
+  </insert>
+  
+</mapper>

@@ -1,0 +1,18 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.yzpay</groupId>
+    <artifactId>yzpay</artifactId>
+    <version>1.0.0</version>
+  </parent>
+  <artifactId>yzpay-sys-facade</artifactId>
+  <version>${project.parent.version}</version>
+  	<dependencies>
+		<dependency>
+			<groupId>com.yzpay</groupId>
+			<artifactId>yzpay-common</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+	</dependencies>
+	
+</project>

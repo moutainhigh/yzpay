@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.h5merch.dao.impl.card.RechargeLsDaoImpl">	    
+
+ 	<!-- 根据微信卡号查找会员充值记录 -->
+ 	<select id="getRechargeLs" parameterType="Map" resultType="com.yunpay.h5merch.permission.entity.card.RechargeLs">
+ 		select * from t_member_recharge_ls 	where userCardCode = #{cardCode} and merchantNo=#{merchantNo}
+ 	</select>
+ 	<!-- 根据微信卡号查找会员充值汇总-->
+ 	<select id="getTotal" parameterType="Map" resultType="Double">
+ 		select round(sum(rechargeAmt),2)
+		from t_member_recharge_ls where userCardCode = #{cardCode} and rechargeStatus = 2 and merchantNo=#{merchantNo}
+ 	</select>
+ 	<!-- 根据微信卡号查找会员赠送汇总-->
+ 	<select id="getSendTotal" parameterType="Map" resultType="Double">
+ 		select round(sum(giveAmt),2)
+		from t_member_recharge_ls where userCardCode = #{cardCode} and rechargeStatus = 2 and merchantNo=#{merchantNo}
+ 	</select>
+ </mapper>

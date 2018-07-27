@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.h5merch.dao.impl.card.MemberCardDaoImpl">	     
+ 	 <!-- 根据商户编码查询该商户下的所有会员卡信息列表 -->
+ 	<!--<select id="getInfo" parameterType="String" resultType="com.yunpay.h5merch.permission.entity.card.MemberCardInfo">
+ 		select t.id as templateId,t.merchantNo as merchantNo,t.card_type as cardType,t.base_info_id as baseInfoId,t.prerogative as prerogative,
+ 		t.auto_activate as autoActivate,t.wx_activate as wxActivate,t.supply_bonus as supplyBonus,t.bonus_url as bonusUrl,t.supply_balance as supplyBalance,
+ 		t.balance_url as balanceUrl,t.custom_field1_name_type as customField1NameType,t.custom_field1_url as customField1Url,
+ 		t.custom_field2_name_type as customField2NameType,t.custom_field2_url as customField2Url,t.custom_field3_name_type as customField3NameType,
+ 		t.custom_field3_url as customField3Url,t.bonus_cleared as bonusCleared,t.bonus_rules as bonusRules,t.balance_rules as balanceRules,
+		t.activate_url as activateUrl,t.custom_cell1_name as customCell1Name,t.custom_cell1_tips as customCell1Tips,
+		t.custom_cell1_url as customCell1Url,t.bonus_rule as bonusRule,t.cost_money_unit as costMoneyUnit,
+		t.increase_bonus as increaseBonus,t.max_increase_bonus as maxIncreaseBonus,t.init_increase_bonus as initIncreaseBonus,
+		t.discount as discount,t.card_id as cardId,t.status as status,t.throwinStatus as throwinStatus,
+		t.show_qrcode_url as showQrcodeUrl,t.ticket as ticket,t.get_num as getNum,t.active_num as activeNum,
+		t.quantity as quantity,t.poster_url as posterUrl,t.is_weixin_membercardtemplate as isWeixinMemberCardTemplate,
+		t.is_alipass_membercardtemplate as isAlipassMemberCardTemplate,t.alipass_card_id as alipassCardId,
+		t.show_alipass_qrcode_url as showAlipassQrcodeUrl,t.appId as appId,t.defaultSend as defaultSend,
+		t.card_logo as cardLogo,t.title_color as titleColor,t.cardno_color as cardnoColor,t.url as url,
+		t.wxCardHtmlUrl as wxCardHtmlUrl,t.wxCardHtmlContent as wxCardHtmlContent, 
+		b.logo_url as logoUrl,b.code_type as codeType,b.brand_name as brandName,b.title as title,b.sub_title as subTitle,b.color as color,
+		b.notice as notice,b.description as description,b.sku_quantity as skuQuantity,b.date_info_type as dateInfoType,
+		b.begin_times as beginTimes,b.end_times as endTimes,b.fixed_term as fixedTerm,b.fixed_begin_term as fixedBeginTerm,
+		b.use_custom_code as useCustomCode,b.bind_openid as bindOpenid,b.service_phone as servicePhone,
+		b.location_id_list as locationIdList,b.source as source,b.custom_url_name as customUrlName,
+		b.custom_url as customUrl,b.custom_url_sub_title as customUrlSubTitle,b.promotion_url_name as promotionUrlName,
+		b.promotion_url as promotionUrl,b.promotion_url_sub_title as promotionUrlSubTitle,b.get_limit as getLimit,
+		b.can_share as canShare,b.can_give_friend as canGiveFriend,b.need_push_on_view as needPushOnView,
+		r.id as ruleId,r.merchantNo as merchantNo,r.init_increase_bonus as ruleInitIncreaseBonus,
+		r.cost_money_unit as ruleCostMoneyUnit,r.increase_bonus as ruleIncreaseBonus,
+		r.max_increase_bonus as ruleMaxIncreaseBonus,r.cost_bonus_unit as costBonusUnit,
+		r.reduce_money as reduceMoney,r.least_money_to_use_bonus as leastMoneyToUseBonus,
+		r.max_reduce_bonus as maxReduceBonus,r.status as ruleStatus
+		from t_membercard_template t
+ 		left join t_membercard_baseinfo b on t.base_info_id = b.id
+ 		left join t_member_integral_rule r on t.id = templateId
+ 		where merchantNo=#{merchantNo}
+ 	</select>
+ -->
+ </mapper>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.h5merch.dao.impl.card.TemplateDaoImpl">	     
+ 	<!-- 根据模板ID查询模板信息 -->
+ 	<select id="getTemplate" parameterType="String" resultType="com.yunpay.h5merch.permission.entity.card.Template">
+ 		select id,merchantNo,card_type as cardType,base_info_id as baseInfoId,prerogative as prerogative,
+ 		auto_activate as autoActivate,wx_activate as wxActivate,supply_bonus as supplyBonus,bonus_url as bonusUrl,supply_balance as supplyBalance,
+ 		balance_url as balanceUrl,custom_field1_name_type as customField1NameType,custom_field1_url as customField1Url,
+ 		custom_field2_name_type as customField2NameType,custom_field2_url as customField2Url,custom_field3_name_type as customField3NameType,
+ 		custom_field3_url as customField3Url,bonus_cleared as bonusCleared,bonus_rules as bonusRules,balance_rules as balanceRules,
+		activate_url as activateUrl,custom_cell1_name as customCell1Name,custom_cell1_tips as customCell1Tips,
+		custom_cell1_url as customCell1Url,bonus_rule as bonusRule,cost_money_unit as costMoneyUnit,
+		increase_bonus as increaseBonus,max_increase_bonus as maxIncreaseBonus,init_increase_bonus as initIncreaseBonus,
+		discount as discount,card_id as cardId,status as status,throwinStatus as throwinStatus,
+		show_qrcode_url as showQrcodeUrl,ticket as ticket,get_num as getNum,active_num as activeNum,
+		quantity as quantity,poster_url as posterUrl,is_weixin_membercardtemplate as isWeixinMemberCardTemplate,
+		is_alipass_membercardtemplate as isAlipassMemberCardTemplate,alipass_card_id as alipassCardId,
+		show_alipass_qrcode_url as showAlipassQrcodeUrl,appId as appId,defaultSend as defaultSend,
+		card_logo as cardLogo,title_color as titleColor,cardno_color as cardnoColor,url,
+		wxCardHtmlUrl,wxCardHtmlContent 
+		from t_membercard_template
+ 		where merchantNo=#{merchantNo}
+ 	</select>
+ 	
+    <!-- 修改会员卡模板信息 -->
+    <update id="updateTemplate" parameterType="com.yunpay.h5merch.permission.entity.card.Template">
+        update t_membercard_template
+        <set>
+        	<if test="cardType != null and cardType != ''">
+        		card_type = #{cardType},
+        	</if>
+        	<if test="prerogative != null and prerogative != ''">
+        		prerogative = #{prerogative},
+        	</if>
+        	<if test="autoActivate != null and autoActivate != ''">
+        		auto_activate = #{autoActivate},
+        	</if>
+        	<if test="wxActivate != null and wxActivate != ''">
+        		wx_activate = #{wxActivate},
+        	</if>
+        	<if test="supplyBonus != null and supplyBonus != ''">
+        		supply_bonus = #{supplyBonus},
+        	</if>
+        	<if test="bonusUrl != null and bonusUrl != ''">
+        		bonus_url = #{bonusUrl},
+        	</if>
+        	<if test="supplyBalance != null and supplyBalance != ''">
+        		supply_balance = #{supplyBalance},
+        	</if>
+        	<if test="balanceUrl != null and balanceUrl != ''">
+        		balance_url = #{balanceUrl},
+        	</if>
+        	<if test="customField1NameType != null and customField1NameType != ''">
+        		custom_field1_name_type = #{customField1NameType},
+        	</if>
+        	<if test="customField1Url != null and customField1Url != ''">
+        		custom_field1_url = #{customField1Url},
+        	</if>
+        	<if test="customField2NameType != null and customField2NameType != ''">
+        		custom_field2_name_type = #{customField2NameType},
+        	</if>
+        	<if test="customField2Url != null and customField2Url != ''">
+        		custom_field2_url = #{customField2Url},
+        	</if>
+        	<if test="customField3NameType != null and customField3NameType != ''">
+        		custom_field3_name_type = #{customField3NameType},
+        	</if>
+        	<if test="customField3Url != null and customField3Url != ''">
+        		custom_field3_url = #{customField3Url},
+        	</if>
+        	<if test="bonusCleared != null and bonusCleared != ''">
+        		bonus_cleared = #{bonusCleared},
+        	</if>
+        	<if test="bonusRules != null and bonusRules != ''">
+        		bonus_rules = #{bonusRules},
+        	</if>
+        	<if test="balanceRules != null and balanceRules != ''">
+        		balance_rules = #{balanceRules},
+        	</if>
+        	<if test="activateUrl != null and activateUrl != ''">
+        		activate_url = #{activateUrl},
+        	</if>
+        	<if test="customCell1Name != null and customCell1Name != ''">
+        		custom_cell1_name = #{customCell1Name},
+        	</if>
+        	<if test="customCell1Tips != null and customCell1Tips != ''">
+        		custom_cell1_tips = #{customCell1Tips},
+        	</if>
+        	<if test="customCell1Url != null and customCell1Url != ''">
+        		custom_cell1_url = #{customCell1Url},
+        	</if>
+        	<if test="bonusRule != null and bonusRule != ''">
+        		bonus_rule = #{bonusRule},
+        	</if>
+        	<if test="costMoneyUnit != null and costMoneyUnit != ''">
+        		cost_money_unit = #{costMoneyUnit},
+        	</if>
+        	<if test="increaseBonus != null and increaseBonus != ''">
+        		increase_bonus = #{increaseBonus},
+        	</if>
+        	<if test="maxIncreaseBonus != null and maxIncreaseBonus != ''">
+        		max_increase_bonus = #{maxIncreaseBonus},
+        	</if>
+        	<if test="initIncreaseBonus != null and initIncreaseBonus != ''">
+        		init_increase_bonus = #{initIncreaseBonus},
+        	</if>
+        	<if test="discount != null and discount != ''">
+        		discount = #{discount},
+        	</if>
+        	<if test="cardId != null and cardId != ''">
+        		card_id = #{cardId},
+        	</if>
+        	<if test="status != null and status != ''">
+        		status = #{status},
+        	</if>
+        	<if test="throwinStatus != null and throwinStatus != ''">
+        		throwinStatus = #{throwinStatus},
+        	</if>
+        	<if test="showQrcodeUrl != null and showQrcodeUrl != ''">
+        		show_qrcode_url = #{showQrcodeUrl},
+        	</if>
+        	<if test="ticket != null and ticket != ''">
+        		ticket = #{ticket},
+        	</if>
+        	<if test="getNum != null and getNum != ''">
+        		get_num = #{getNum},
+        	</if>
+        	<if test="activeNum != null and activeNum != ''">
+        		active_num = #{activeNum},
+        	</if>
+        	<if test="quantity != null and quantity != ''">
+        		quantity = #{quantity},
+        	</if>
+        	<if test="posterUrl != null and posterUrl != ''">
+        		poster_url = #{posterUrl},
+        	</if>
+        	<if test="isWeixinMemberCardTemplate != null and isWeixinMemberCardTemplate != ''">
+        		is_weixin_membercardtemplate = #{isWeixinMemberCardTemplate},
+        	</if>
+        	<if test="isAlipassMemberCardTemplate != null and isAlipassMemberCardTemplate != ''">
+        		is_alipass_membercardtemplate = #{isAlipassMemberCardTemplate},
+        	</if>
+        	<if test="alipassCardId != null and alipassCardId != ''">
+        		alipass_card_id = #{alipassCardId},
+        	</if>
+        	<if test="showAlipassQrcodeUrl != null and showAlipassQrcodeUrl != ''">
+        		show_alipass_qrcode_url = #{showAlipassQrcodeUrl},
+        	</if>
+        	<if test="appId != null and appId != ''">
+        		appId = #{appId},
+        	</if>
+        	<if test="defaultSend != null and defaultSend != ''">
+        		defaultSend = #{defaultSend},
+        	</if>
+        	<if test="cardLogo != null and cardLogo != ''">
+        		card_logo = #{cardLogo},
+        	</if>
+        	<if test="titleColor != null and titleColor != ''">
+        		title_color = #{titleColor},
+        	</if>
+        	<if test="cardnoColor != null and cardnoColor != ''">
+        		cardno_color = #{cardnoColor},
+        	</if>
+        	<if test="url != null and url != ''">
+        		url = #{url},
+        	</if>
+        	<if test="wxCardHtmlUrl != null and wxCardHtmlUrl != ''">
+        		wxCardHtmlUrl = #{wxCardHtmlUrl},
+        	</if>
+        	<if test="wxCardHtmlContent != null and wxCardHtmlContent != ''">
+        		wxCardHtmlContent = #{wxCardHtmlContent},
+        	</if>
+        </set>
+        where merchantNo = #{merchantNo}
+    </update>
+ 
+    <!-- 添加会员卡模板信息 -->
+    <insert id="insertTemplate" parameterType="com.yunpay.h5merch.permission.entity.card.Template">
+    	<selectKey resultType="int" keyProperty="id" order="AFTER">
+    		select @@IDENTITY as id
+		</selectKey>
+        insert into t_membercard_template
+			(merchantNo,card_type,base_info_id,prerogative,auto_activate,wx_activate,supply_bonus,bonus_url,supply_balance,balance_url,
+			custom_field1_name_type,custom_field1_url,custom_field2_name_type,custom_field2_url,custom_field3_name_type,custom_field3_url,
+			bonus_cleared,bonus_rules,balance_rules,activate_url,custom_cell1_name,custom_cell1_tips,custom_cell1_url,bonus_rule,
+			cost_money_unit,increase_bonus,max_increase_bonus,init_increase_bonus,discount,card_id,status,throwinStatus,show_qrcode_url,
+			ticket,get_num,active_num,quantity,poster_url,is_weixin_membercardtemplate,is_alipass_membercardtemplate,alipass_card_id,
+			show_alipass_qrcode_url,appId,defaultSend,card_logo,title_color,cardno_color,url,wxCardHtmlUrl,wxCardHtmlContent)
+			values
+			(#{merchantNo,jdbcType=VARCHAR},#{cardType,jdbcType=VARCHAR},#{baseInfoId,jdbcType=INTEGER},#{prerogative,jdbcType=VARCHAR},
+			#{autoActivate,jdbcType=INTEGER},#{wxActivate,jdbcType=INTEGER},#{supplyBonus,jdbcType=INTEGER},#{bonusUrl,jdbcType=VARCHAR},
+			#{supplyBalance,jdbcType=INTEGER},#{balanceUrl,jdbcType=VARCHAR},#{customField1NameType,jdbcType=VARCHAR},#{customField1Url,jdbcType=VARCHAR},
+			#{customField2NameType,jdbcType=VARCHAR},#{customField2Url,jdbcType=VARCHAR},#{customField3NameType,jdbcType=VARCHAR},
+			#{customField3Url,jdbcType=VARCHAR},#{bonusCleared,jdbcType=VARCHAR},#{bonusRules,jdbcType=VARCHAR},#{balanceRules,jdbcType=VARCHAR},
+			#{activateUrl,jdbcType=VARCHAR},#{customCell1Name,jdbcType=VARCHAR},#{customCell1Tips,jdbcType=VARCHAR},#{customCell1Url,jdbcType=VARCHAR},
+			#{bonusRule,jdbcType=VARCHAR},#{costMoneyUnit,jdbcType=INTEGER},#{increaseBonus,jdbcType=INTEGER},#{maxIncreaseBonus,jdbcType=INTEGER},
+			#{initIncreaseBonus,jdbcType=INTEGER},#{discount,jdbcType=INTEGER},#{cardId,jdbcType=VARCHAR},#{status,jdbcType=INTEGER},
+			#{throwinStatus,jdbcType=INTEGER},#{showQrcodeUrl,jdbcType=VARCHAR},#{ticket,jdbcType=VARCHAR},#{getNum,jdbcType=INTEGER},
+			#{activeNum,jdbcType=INTEGER},#{quantity,jdbcType=INTEGER},#{posterUrl,jdbcType=VARCHAR},#{isWeixinMemberCardTemplate,jdbcType=INTEGER},
+			#{isAlipassMemberCardTemplate,jdbcType=INTEGER},#{alipassCardId,jdbcType=VARCHAR},#{showAlipassQrcodeUrl,jdbcType=VARCHAR},
+			#{appId,jdbcType=VARCHAR},#{defaultSend,jdbcType=INTEGER},#{cardLogo,jdbcType=VARCHAR},#{titleColor,jdbcType=VARCHAR},
+			#{cardnoColor,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{wxCardHtmlUrl,jdbcType=VARCHAR},#{wxCardHtmlContent,jdbcType=VARCHAR})
+    </insert>
+    
+     	<!-- 根据模板ID删除会员卡 -->
+    <delete id="deleteTemplate" parameterType="String">
+    	delete  from t_membercard_template 
+    	where merchantNo = #{merchantNo}
+    </delete>
+ </mapper>

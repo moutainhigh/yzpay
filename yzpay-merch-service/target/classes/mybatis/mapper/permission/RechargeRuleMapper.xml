@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.h5merch.dao.impl.card.RechargeRuleDaoImpl">	      
+ 	<!-- 根据商户编码查询储值规则表 -->
+ 	<select id="getRechargeRule" parameterType="String" resultType="com.yunpay.h5merch.permission.entity.card.RechargeRule">
+ 		select id,grade_id as gradeId,charge,send,status,createdAt,createdBy,updatedAt,updatedBy,merchantNo
+		from t_membercard_recharge
+ 		where merchantNo=#{merchantNo}
+ 	</select>
+ 	<!-- 根据id查询储值规则表 -->
+ 	<select id="getRechargeRuleById" parameterType="Integer" resultType="com.yunpay.h5merch.permission.entity.card.RechargeRule">
+ 		select id,grade_id as gradeId,charge,send,status,createdAt,createdBy,updatedAt,updatedBy,merchantNo
+		from t_membercard_recharge
+ 		where id=#{id}
+ 	</select>
+ 	
+ 	<!-- 根据商户编码删除会员卡储值规则 -->
+    <delete id="deleteRechargeRule" parameterType="String">
+    	delete from t_membercard_recharge
+    	where merchantNo = #{merchantNo}
+    </delete>
+ 	<!-- 根据id删除会员卡储值规则 -->
+    <delete id="deleteRechargeRuleById" parameterType="Integer">
+    	delete from t_membercard_recharge
+    	where id = #{id}
+    </delete>
+      	  
+    <!-- 修改会员卡信息 -->
+    <update id="updateRechargeRule" parameterType="com.yunpay.h5merch.permission.entity.card.RechargeRule">
+        update t_membercard_recharge
+        <set>
+        	<if test="gradeId != null and gradeId != ''">
+        		grade_id = #{gradeId},
+        	</if>
+        	<if test="charge != null and charge != ''">
+        		charge = #{charge},
+        	</if>
+        	<if test="send != null and send != ''">
+        		send = #{send},
+        	</if>
+        	<if test="status != null and status != ''">
+        		status = #{status},
+        	</if>
+        	<if test="updatedBy != null and updatedBy != ''">
+        		updatedBy = #{updatedBy},
+        	</if>
+        	updatedAt = now()
+        </set>
+        where t.id = #{templateId} and t.id = c.template_id and t.id = r.templateId and t.base_info_id = b.id
+    </update>
+    
+
+    <!-- 添加会员卡储值规则 -->
+    <insert id="insertRechargeRule" parameterType="com.yunpay.h5merch.permission.entity.card.RechargeRule" >
+    	
+        insert into t_membercard_recharge
+			(grade_id,charge,send,status,createdAt,createdBy,merchantNo)
+			values
+			(#{gradeId,jdbcType=VARCHAR},#{charge,jdbcType=INTEGER},#{send,jdbcType=INTEGER},#{status,jdbcType=INTEGER},now(),
+			#{createdBy,jdbcType=VARCHAR},#{merchantNo,jdbcType=VARCHAR}) 
+    </insert>
+ </mapper>

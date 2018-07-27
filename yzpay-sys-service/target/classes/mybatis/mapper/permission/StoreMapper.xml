@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.permission.dao.impl.StoreDaoImpl">	    
+    <sql id="condition_sql">
+    	1=1    	              
+        <if test="storeName != null and storeName != ''"> and s.storeName like CONCAT(CONCAT('%', #{storeName}), '%')</if>
+        <if test="registerName != null and registerName != ''"> and m.registerName like CONCAT(CONCAT('%', #{registerName}), '%')</if>
+        <if test="contactMan!= null and contactMan != ''">  and s.contactMan like CONCAT(CONCAT('%', #{contactMan}), '%')</if>
+        <if test="contactTel!= null and contactTel != ''">  and s.contactTel like CONCAT(CONCAT('%', #{contactTel}), '%')</if>
+        <if test="prov!= null and prov != ''">  and s.prov=#{prov}</if>
+        <if test="city!= null and city != ''">  and s.city=#{city}</if>
+        <if test="area!= null and area != ''">  and s.area=#{area}</if>
+        <if test="merId!= null and merId != ''">  and s.merId=#{merId}</if>
+ 	</sql>  
+    
+        <!-- 门店 分页 -->
+    <select id="listPage" parameterType="java.util.Map" resultType="com.yunpay.permission.entity.StoreEntity">
+    	SELECT s.*,m.registerName,r.name as provName,r1.name as cityName,r2.name as areaName from t_store s 
+    	left join t_merchant m on s.merId=m.id
+    	left join t_region r on s.prov=r.id+"0"
+    	left join t_region r1 on s.city=r1.id+"0"
+    	left join t_region r2 on s.area=r2.id+"0"
+    	<where>
+        	<include refid="condition_sql" />                
+        </where>    
+        order by storeNo desc
+        limit #{pageIndex},#{pageSize}
+    </select>
+
+    <!-- 统计门店条数 -->
+    <select id="listPageCount" parameterType="java.util.Map" resultType="Integer">
+    
+		select count(1) from
+		(select s.*,m.registerName from
+		t_store s left join t_merchant m 
+		on s.merId=m.id
+		<where>
+			<include refid="condition_sql" />
+		</where>) d
+    </select>
+    
+    <!-- 查询所有门店  -->
+    <select id="getStoreList" parameterType="com.yunpay.permission.entity.StoreEntity" resultType="com.yunpay.permission.entity.StoreEntity">
+        SELECT s.id,s.storeNo,s.storeName,s.merId,s.prov,s.city,s.area,s.address,s.contactMan,s.contactTel,
+        s.longitude,s.latitude,s.createdAt,s.updatedAt,s.status,s.orgNo,s.remark,
+        (case when s.infoFrom = 0 then "平台系统"  when s.infoFrom = 1 then "商户系统" end) infoFrom,
+        m.registerName,r.name as provName,r1.name as cityName,r2.name as areaName from t_store s 
+    	left join t_merchant m on s.merId=m.id
+    	left join t_region r on s.prov=r.id+"0"
+    	left join t_region r1 on s.city=r1.id+"0"
+    	left join t_region r2 on s.area=r2.id+"0"
+		<where>
+        	<include refid="condition_sql" />                
+        </where>         
+        order by storeNo               
+    </select>
+    
+    <!-- 门店 根据storeNo查 -->
+    <select id="selectByStoreNo" parameterType="String" resultType="com.yunpay.permission.entity.StoreEntity">
+        SELECT s.*,m.registerName,r.name as provName,r1.name as cityName,r2.name as areaName from t_store s 
+    	left join t_merchant m on s.merId=m.id
+    	left join t_region r on s.prov=r.id+"0"
+    	left join t_region r1 on s.city=r1.id+"0"
+    	left join t_region r2 on s.area=r2.id+"0"	
+		WHERE s.storeNo=#{storeNo} 
+        order by storeNo 
+    </select>
+    
+    <!-- 门店 根据storeNo删除 -->
+    <delete id="deleteByStoreNo" parameterType="String">
+        delete from t_store
+        where storeNo = #{storeNo}
+    </delete>  
+    <!--  根据storeNo删除 店员-->
+    <delete id="deleteClerk" parameterType="String">
+        delete from t_merchant_user
+        where storeNo = #{storeNo}
+    </delete>  
+        
+    <!-- 修改状态码 -->
+    <update id="updateStatus" parameterType="Integer">
+        update t_store
+        <set> status = #{status} </set> 
+        where id = #{id}
+    </update>
+    
+    <!-- 修改门店信息 -->
+    <update id="updateInfo" parameterType="com.yunpay.permission.entity.StoreEntity">
+        update t_store
+        <set>
+        	<if test="storeName !=null and storeName != ''">
+				storeName= #{storeName},
+			</if>
+        	<if test="prov !=null and prov != ''">
+				prov= #{prov},
+			</if>
+        	<if test="city !=null and city != ''">
+				city= #{city},
+			</if>
+        	<if test="area !=null and area != ''">
+				area= #{area},
+			</if>
+        	<if test="address !=null and address != ''">
+				address= #{address},
+			</if>
+        	<if test="contactTel !=null and contactTel != ''">
+				contactTel= #{contactTel},
+			</if>
+        	<if test="contactMan !=null and contactMan != ''">
+				contactMan= #{contactMan},
+			</if>
+        	<if test="longitude !=null and longitude != ''">
+				longitude= #{longitude},
+			</if>
+        	<if test="latitude !=null and latitude != ''">
+				latitude= #{latitude},
+			</if>
+        	<if test="remark !=null and remark != ''">
+				remark= #{remark},
+			</if>
+        	<if test="status !=null and status != ''">
+				status = #{status},
+			</if>
+			updatedAt = now(),
+        </set>
+        where storeNo = #{storeNo}
+        
+    </update>
+
+    <!-- 新增门店信息 -->
+    <insert id="addInfo" parameterType="com.yunpay.permission.entity.StoreEntity">
+        insert into t_store
+			(merId,storeNo,storeName,prov,city,area,address,contactTel,longitude,
+			latitude,status,createdAt,orgNo,infoFrom,remark,contactMan)
+			values
+			(#{merId,jdbcType=INTEGER},#{storeNo,jdbcType=VARCHAR},#{storeName,jdbcType=VARCHAR},#{prov,jdbcType=VARCHAR},
+			#{city,jdbcType=VARCHAR},#{area,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},#{contactTel,jdbcType=VARCHAR},
+			#{longitude,jdbcType=VARCHAR},#{latitude,jdbcType=VARCHAR},#{status,jdbcType=INTEGER},now(),			
+			#{orgNo,jdbcType=VARCHAR},#{infoFrom,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},#{contactMan,jdbcType=VARCHAR})
+    </insert>
+    
+    <select id="getIdByMerchNo" parameterType="java.lang.String" resultType="com.yunpay.permission.entity.Merchant">
+		select * from
+		t_merchant
+		where merchantNo = #{merchantNo}
+	</select>
+	
+	<!-- 根据商户ID查询编码最大的门店编码 -->
+    <select id="getStoreNoMax" parameterType="java.lang.Integer" resultType="String">
+		select storeNo from
+		t_store
+		where merId = #{merId}
+		order by storeNo desc
+	</select>
+ </mapper>

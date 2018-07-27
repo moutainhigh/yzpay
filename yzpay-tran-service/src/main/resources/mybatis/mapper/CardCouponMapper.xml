@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunpay.serv.dao.CardCouponDao" >
+  <resultMap id="BaseResultMap" type="com.yunpay.serv.model.CardCoupon" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="appidUserId" property="appidUserId" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="subType" property="subType" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="discount" property="discount" jdbcType="DOUBLE" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="pagesPer" property="pagesPer" jdbcType="INTEGER" />
+    <result column="info" property="info" jdbcType="VARCHAR" />
+    <result column="sn" property="sn" jdbcType="VARCHAR" />
+    <result column="serialNumber" property="serialNumber" jdbcType="VARCHAR" />
+    <result column="startTime" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="quota" property="quota" jdbcType="DOUBLE" />
+    <result column="createdAt" property="createdAt" jdbcType="TIMESTAMP" />
+    <result column="updatedAt" property="updatedAt" jdbcType="TIMESTAMP" />
+    <result column="appidCardId" property="appidCardId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="useTime" property="useTime" jdbcType="TIMESTAMP" />
+    <result column="orgNo" property="orgNo" jdbcType="VARCHAR" />
+    <result column="friendUserName" property="friendUserName" jdbcType="VARCHAR" />
+    <result column="oldUserCardCode" property="oldUserCardCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, appidUserId, title, source, type, subType, price, discount, score, pagesPer, 
+    info, sn, serialNumber, startTime, endTime, quota, createdAt, updatedAt, appidCardId, status, 
+    useTime, orgNo,friendUserName,oldUserCardCode
+  </sql>
+  
+  
+  <sql id="Select_Parm_Column_List">
+  	 <if test="appidUserId != null" >
+       and appidUserId = #{appidUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="title != null" >
+       and title = #{title,jdbcType=VARCHAR}
+      </if>
+      <if test="source != null" >
+       and source = #{source,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null" >
+       and type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="subType != null" >
+       and subType = #{subType,jdbcType=INTEGER}
+      </if>
+      <if test="price != null" >
+       and price = #{price,jdbcType=DOUBLE}
+      </if>
+      <if test="discount != null" >
+       and discount = #{discount,jdbcType=DOUBLE}
+      </if>
+      <if test="score != null" >
+       and score = #{score,jdbcType=INTEGER}
+      </if>
+      <if test="pagesPer != null" >
+       and pagesPer = #{pagesPer,jdbcType=INTEGER}
+      </if>
+      <if test="info != null" >
+       and info = #{info,jdbcType=VARCHAR}
+      </if>
+      <if test="sn != null" >
+       and sn = #{sn,jdbcType=VARCHAR}
+      </if>
+      <if test="serialNumber != null" >
+       and serialNumber = #{serialNumber,jdbcType=VARCHAR}
+      </if>
+      <if test="startTime != null" >
+       and startTime = #{startTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="endTime != null" >
+       and endTime = #{endTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="quota != null" >
+       and quota = #{quota,jdbcType=DOUBLE}
+      </if>
+      <if test="createdAt != null" >
+       and createdAt = #{createdAt,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updatedAt != null" >
+       and updatedAt = #{updatedAt,jdbcType=TIMESTAMP}
+      </if>
+      <if test="appidCardId != null" >
+       and appidCardId = #{appidCardId,jdbcType=VARCHAR}
+      </if>
+      <if test="status != null" >
+       and status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="useTime != null" >
+       and useTime = #{useTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="orgNo != null  and orgNo !='1000'">
+       and orgNo like CONCAT(#{orgNo,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="orgNo == null">and orgNo like ''</if>
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_card_coupon
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_card_coupon
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yunpay.serv.model.CardCoupon" >
+    insert into t_card_coupon (id, appidUserId, title, 
+      source, type, subType, 
+      price, discount, score, pagesPer, 
+      info, sn, serialNumber, startTime, 
+      endTime, quota, createdAt, 
+      updatedAt, appidCardId, status, 
+      useTime, orgNo,friendUserName,oldUserCardCode)
+    values (#{id,jdbcType=INTEGER}, #{appidUserId,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{source,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{subType,jdbcType=INTEGER}, 
+      #{price,jdbcType=DOUBLE}, #{discount,jdbcType=DOUBLE}, #{score,jdbcType=INTEGER}, #{pagesPer,jdbcType=INTEGER}, 
+      #{info,jdbcType=VARCHAR}, #{sn,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{quota,jdbcType=DOUBLE}, #{createdAt,jdbcType=TIMESTAMP}, 
+      #{updatedAt,jdbcType=TIMESTAMP}, #{appidCardId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{useTime,jdbcType=TIMESTAMP}, #{orgNo,jdbcType=VARCHAR},#{friendUserName,jdbcType=VARCHAR},
+      #{oldUserCardCode,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.yunpay.serv.model.CardCoupon" >
+    update t_card_coupon
+    <set >
+      <if test="appidUserId != null" >
+        appidUserId = #{appidUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="subType != null" >
+        subType = #{subType,jdbcType=INTEGER},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=DOUBLE},
+      </if>
+      <if test="score != null" >
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="pagesPer != null" >
+        pagesPer = #{pagesPer,jdbcType=INTEGER},
+      </if>
+      <if test="info != null" >
+        info = #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="sn != null" >
+        sn = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null" >
+        serialNumber = #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        startTime = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        endTime = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="quota != null" >
+        quota = #{quota,jdbcType=DOUBLE},
+      </if>
+      <if test="createdAt != null" >
+        createdAt = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null" >
+        updatedAt = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appidCardId != null" >
+        appidCardId = #{appidCardId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="useTime != null" >
+        useTime = #{useTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgNo != null" >
+        orgNo = #{orgNo,jdbcType=VARCHAR},
+      </if>
+      <if test="friendUserName != null" >
+        friendUserName = #{friendUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="oldUserCardCode != null" >
+        oldUserCardCode = #{oldUserCardCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yunpay.serv.model.CardCoupon" >
+    update t_card_coupon
+    set appidUserId = #{appidUserId,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      subType = #{subType,jdbcType=INTEGER},
+      price = #{price,jdbcType=DOUBLE},
+      discount = #{discount,jdbcType=DOUBLE},
+      score = #{score,jdbcType=INTEGER},
+      pagesPer = #{pagesPer,jdbcType=INTEGER},
+      info = #{info,jdbcType=VARCHAR},
+      sn = #{sn,jdbcType=VARCHAR},
+      serialNumber = #{serialNumber,jdbcType=VARCHAR},
+      startTime = #{startTime,jdbcType=TIMESTAMP},
+      endTime = #{endTime,jdbcType=TIMESTAMP},
+      quota = #{quota,jdbcType=DOUBLE},
+      createdAt = #{createdAt,jdbcType=TIMESTAMP},
+      updatedAt = #{updatedAt,jdbcType=TIMESTAMP},
+      appidCardId = #{appidCardId,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      useTime = #{useTime,jdbcType=TIMESTAMP},
+      orgNo = #{orgNo,jdbcType=VARCHAR},
+      friendUserName = #{friendUserName,jdbcType=VARCHAR},
+      oldUserCardCode = #{oldUserCardCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.permission.dao.impl.MerchDaoImpl">
+	
+	<!-- 新增商户基本信息 --> 
+	<insert id="addMerch" parameterType="com.yunpay.permission.entity.Merchant" useGeneratedKeys="true" keyProperty="id" >
+		insert into t_merchant (merchantNo,registerName,prov,city,area,merchantName,address,cardName,cardNo,industryTypeId,tel,email,infoFrom,md5Key,createdAt) 
+		values(#{merchantNo},#{registerName},#{prov},#{city},#{area},#{merchantName},#{address},#{cardName},#{cardNo},#{industryTypeId},#{tel},#{email},#{infoFrom},#{md5Key},#{createdAt})
+	</insert>
+	
+	<!-- 新增商户银行账户信息 -->
+	<insert id="addMerchAcc" parameterType="com.yunpay.permission.entity.MerchantAccount">
+		insert into t_merchant_acc (merId,accBank,accSubBank,accNo,accName,prov,city,createTime) values(#{merId},#{accBank},#{accSubBank},#{accNo},#{accName},#{prov},#{city},#{createTime})
+	</insert>
+	
+	<!-- 新增商户附件信息 -->
+	<insert id="addMerchAttach" parameterType="com.yunpay.permission.entity.MerchAttach">
+		insert into t_merchant_attach (cardNo,cardBackNo,busiLicense,cyLicense,merLogo,merId) values(#{cardNo},#{cardBackNo},#{busiLicense},#{cyLicense},#{merLogo},#{merId})
+	</insert>
+	
+	<!-- 更新商户附件信息 -->
+	<update id="updateMerchAttach" parameterType="com.yunpay.permission.entity.MerchAttach">
+		update t_merchant_attach
+		<set>
+			<if test="cardNo != null">
+				cardNo=#{cardNo},
+			</if>
+			<if test="cardBackNo != null">
+				cardBackNo=#{cardBackNo},
+			</if>
+			<if test="cardBackNo != null">
+				busiLicense=#{busiLicense},
+			</if>
+			<if test="cardBackNo != null">
+				cyLicense=#{cyLicense},
+			</if>
+			<if test="cardBackNo != null">
+				merLogo=#{merLogo}
+			</if>
+		</set>
+		where merId=#{merId}
+	</update>
+	
+	<!-- 新增sys附件信息 -->
+	<insert id="addSysAttach" parameterType="com.yunpay.permission.entity.SysAttach" useGeneratedKeys="true" keyProperty="id">
+		insert into t_sys_attach (fileName,fileSuffix,fileSize,savePath,saveName,createTime) values(#{fileName},#{fileSuffix},#{fileSize},#{savePath},#{saveName},#{createTime})
+	</insert>
+	
+
+	<!-- 获取所有的省市区数据 -->
+	<select id="getAllProv"  resultType="com.yunpay.permission.entity.Address">
+		select * from t_region order by id
+	</select>
+	<!-- 查询省信息 -->
+	<select id="getProvince"  resultType="com.yunpay.permission.entity.Address">
+		select * from t_region where type = 0 order by id
+	</select>
+	<!-- 查询市信息 -->
+	<select id="getCity" parameterType="java.lang.Integer" resultType="com.yunpay.permission.entity.Address">
+		select * from t_region where pid = #{id} order by id
+	</select>
+	<!-- 查询区信息 -->
+	<select id="getArea" parameterType="java.lang.Integer" resultType="com.yunpay.permission.entity.Address">
+		select * from t_region where pid = #{id} order by id
+	</select>
+	
+
+	<!-- 获取 商户基本信息、结算信息、证件信息 -->
+	<select id="getMerchInfo" parameterType="java.lang.String" resultType="com.yunpay.permission.entity.MerchInfo">
+		SELECT t.id,t.merchantNo,t.merchantName,t.registerName,t.md5Key,t.prov,t.city,t.area,t.address,t.cardName,
+		t.auditStatus,t.cardNo,d.`name` industry,t.tel,t.email,m.accBank,m.prov accProv,m.city accCity,
+		m.accSubBank,m.accName,m.accNo,a.cardNo attach1,a.cardBackNo attach2,a.busiLicense attach3,
+		a.cyLicense attach4,a.merLogo attach5, s.savePath identityCardNo,s2.savePath identityCardNo2,
+		s3.savePath busiLicense,s4.savePath cyLicense,s5.savePath merLogo
+		FROM t_merchant t
+		left join t_merchant_industry d on t.industryTypeId = d.id
+		left join t_merchant_acc m ON t.id = m.merId
+		left join t_merchant_attach a on m.merid = a.merid
+		left join t_sys_attach s on a.cardno = s.id
+		left join t_sys_attach s2 on a.cardbackno = s2.id
+		left join t_sys_attach s3 on a.busilicense = s3.id
+		left join t_sys_attach s4 on a.cylicense = s4.id
+		left join t_sys_attach s5 on a.merlogo = s5.id
+		where
+		t.merchantNo = #{merchantNo}
+	</select>
+	
+	<!-- 更新商户资料 -->
+	<update id="update" parameterType="com.yunpay.permission.entity.Merchant">
+		update t_merchant t 
+		<trim prefix="set" suffixOverrides=",">
+			<if test="merchantName != null">
+				t.merchantName=#{merchantName},updatedAt=#{updatedAt},
+			</if>
+			<if test="registerName != null">
+				t.registerName=#{registerName},
+			</if>
+			<if test="prov != null">
+				t.prov=#{prov},
+			</if>
+			<if test="city != null">
+				t.city = #{city},
+			</if>
+			<if test="area != null">
+				t.area = #{area},
+			</if>
+			<if test="address != null">
+				t.address = #{address},
+			</if>
+			<if test="cardName != null">
+				t.cardName = #{cardName},
+			</if>
+			<if test="cardNo != null">
+				t.cardNo = #{cardNo},
+			</if>
+			<if test="industryTypeId != null">
+				t.industryTypeId=#{industryTypeId},
+			</if>
+			<if test="tel != null">
+				t.tel=#{tel},
+			</if>
+			<if test="email != null">
+				t.email=#{email}
+			</if>
+		</trim>
+		where merchantNo=#{merchantNo}	
+	</update>
+		<!-- 查询是否进行了微信配置 -->
+	<select id="isConfigWechat" parameterType="java.lang.String" resultType="com.yunpay.permission.entity.WechatConfig">
+		select * from t_wechat_config where merchantNo = (select t.merchantNo from t_merchant t where t.merchantNo=#{merchantNo} limit 1);
+	</select>
+	<!-- 查询是否进行了支付宝配置 -->
+	<select id="isConfigAlipay" parameterType="java.lang.String" resultType="com.yunpay.permission.entity.AlipayConfig">
+		select * from t_alipay_config where merchantNo = (select t.merchantNo from t_merchant t where t.merchantNo=#{merchantNo} limit 1);
+	</select>
+	<!-- 查询微信配置 -->
+	<select id="queryWechatConfig" parameterType="java.lang.String" resultType="com.yunpay.permission.entity.WechatConfig">
+		select * from t_wechat_config where merchantNo = (select t.merchantNo from t_merchant t where t.merchantNo=#{merchantNo})
+	</select>
+	<!-- 查询微信服务商 -->
+	<select id="getParent" parameterType="java.lang.Integer" resultType="com.yunpay.permission.entity.WechatConfig">
+		select * from t_wechat_config where mchType = #{mchType}
+	</select>
+	<!-- 查询支付宝配置 -->
+	<select id="queryAlipayConfig" parameterType="java.lang.String" resultType="com.yunpay.permission.entity.AlipayConfig">
+		select * from t_alipay_config where merchantNo = (select t.merchantNo from t_merchant t where t.merchantNo=#{merchantNo})
+	</select>
+	
+	
+	<!-- 更新商户银行账户信息 -->
+	<update id="updateAccount" parameterType="com.yunpay.permission.entity.MerchantAccount">
+		update t_merchant_acc t set  t.accBank=#{accBank},t.prov=#{prov},t.city=#{city},t.accSubBank=#{accSubBank},t.accName=#{accName},t.accNo=#{accNo} where merId=#{merId}
+	</update>
+	
+	<!-- 获得商户附件信息 -->
+	<select id="getMerchAttach" parameterType="java.lang.Integer" resultType="com.yunpay.permission.entity.MerchAttach">
+		select * from t_merchant_attach where merId = #{merId}
+	</select>
+</mapper>

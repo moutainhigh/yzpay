@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.permission.dao.impl.AppDaoImpl">
+	<!-- 获取所有的省市区数据 -->
+	<select id="appVersion"   resultType="com.yunpay.permission.entity.SysAppRelease">
+		select * from t_yunpu_sys_app_release 
+	</select>
+	
+	<!-- 更新app版本信息 -->
+	<select id="updateVersion" parameterType="com.yunpay.permission.entity.SysAppRelease">
+		update t_yunpu_sys_app_release t set t.verName=#{verName},t.verCode=#{verCode},t.appLink=#{appLink} where appCode=#{appCode}
+	</select>
+	
+	<!-- 查询app版本 -->
+	<select id="findByAppCode" parameterType="java.lang.String" resultType="com.yunpay.permission.entity.SysAppRelease">
+		select * from t_yunpu_sys_app_release where appCode = #{appCode}
+	</select>
+</mapper>

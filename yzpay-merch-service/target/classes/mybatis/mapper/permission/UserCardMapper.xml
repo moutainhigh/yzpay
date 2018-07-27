@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.h5merch.dao.impl.card.UserCardDaoImpl">	    
+    
+ 	<!-- 根据会员的卡的ID查找卡的信息 -->
+ 	<select id="getUserCard" parameterType="Integer" resultType="com.yunpay.h5merch.permission.entity.card.UserCard">
+ 		select * from
+ 		t_membercard 
+ 		where id = #{id} 
+ 	</select>
+ 	<!-- 根据会员的卡的信息查找卡的信息 -->
+ 	<select id="getUserCardByUser" parameterType="Map" resultType="com.yunpay.h5merch.permission.entity.card.UserCard">
+ 		select * from
+ 		t_membercard 
+ 		where card_id = #{cardId} and openId = #{openId}
+ 	</select>
+ 	<!-- 根据商户编码查找会员列表 -->
+ 	<select id="getUserCardList" parameterType="String" resultType="com.yunpay.h5merch.permission.entity.card.UserCard">
+ 		select * from t_membercard 	where merchantNo = #{merchantNo}
+ 	</select>
+ 	<!-- 根据商户编码查找会员列表 -->
+ 	<select id="pageUserCardList" parameterType="Map" resultType="com.yunpay.h5merch.permission.entity.card.UserCard">
+ 		select * from t_membercard 	where merchantNo = #{merchantNo}
+ 		order by createdAt 
+ 		limit #{pageIndex},#{pageSize}
+ 	</select>
+ 	<!-- 根据商户编码查找会员数量 -->
+ 	<select id="getUserCardNum" parameterType="String" resultType="com.yunpay.h5merch.permission.entity.card.UserCardNum">
+ 		select count(id) as totalNum,
+ 				count(case when channelType = 1 then id end) as aliNum,
+ 				count(case when channelType = 2 then id end) as wxNum
+		from t_membercard where merchantNo = #{merchantNo}
+ 	</select>	
+ 	<!-- 根据商户编码查找会员数量 -->
+ 	<select id="getUserCardTotal" parameterType="String" resultType="Integer">
+ 		select count(id)
+		from t_membercard where merchantNo = #{merchantNo}
+ 	</select>	
+ </mapper>

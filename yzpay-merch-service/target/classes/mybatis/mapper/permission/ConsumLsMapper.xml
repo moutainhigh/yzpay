@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.h5merch.dao.impl.card.ConsumLsDaoImpl">	    
+
+ 	<!-- 根据微信卡号查找会员消费记录 -->
+ 	<select id="getConsumLs" parameterType="Map" resultType="com.yunpay.h5merch.permission.entity.card.ConsumLs">
+ 		select * from t_member_consum_ls 	where userCardCode = #{cardCode} and merchantNo=#{merchantNo}
+ 	</select>
+ 	<!-- 根据微信卡号查找会员消费汇总-->
+ 	<select id="getTotal" parameterType="Map" resultType="Double">
+ 		select round(sum(tranAmt),2)
+		from t_member_consum_ls where userCardCode = #{cardCode} and tranStatus = 2 and merchantNo=#{merchantNo}
+ 	</select>
+
+ 	<!-- 根据卡号查找会员消费汇总-->
+ 	<select id="getReAndConList" parameterType="Map" resultType="com.yunpay.h5merch.permission.entity.card.UserReAndCon">
+ 		SELECT giveAmt,rechargeAmt,0 as tranAmt,createdAt FROM t_member_recharge_ls 
+ 		where userCardCode = #{cardCode} and rechargeStatus = 2 and merchantNo=#{merchantNo}
+		UNION
+		(SELECT  0 as giveAmt,0 as rechargeAmt,tranAmt,createdAt FROM t_member_consum_ls 
+		where userCardCode = #{cardCode} and tranStatus = 2 and merchantNo=#{merchantNo})
+		ORDER BY createdAt DESC limit 0,20
+ 	</select>
+ </mapper>

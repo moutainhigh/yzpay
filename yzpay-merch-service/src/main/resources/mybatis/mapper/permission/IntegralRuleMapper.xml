@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.h5merch.dao.impl.card.IntegralRuleDaoImpl">	    
+ 	<!-- 根据商户编码查询积分规则 -->
+ 	<select id="getIntegralRule" parameterType="String" resultType="com.yunpay.h5merch.permission.entity.card.IntegralRule">
+ 		select 
+		id,merchantNo,init_increase_bonus as initIncreaseBonus,
+		cost_money_unit as costMoneyUnit,increase_bonus as increaseBonus,
+		max_increase_bonus as maxIncreaseBonus,cost_bonus_unit as costBonusUnit,
+		reduce_money as reduceMoney,least_money_to_use_bonus as leastMoneyToUseBonus,
+		max_reduce_bonus as maxReduceBonus,status as status,templateId as templateId,
+		orgNo as orgNo
+		from  t_member_bonus_rule 
+ 		where merchantNo=#{merchantNo}
+ 	</select>
+ 	<!-- 根据商户编码删除会员卡积分规则 -->
+    <delete id="deleteIntegralRule" parameterType="String">
+    	delete t_member_bonus_rule
+    	where merchantNo = #{merchantNo}
+    </delete>
+    
+    <!-- 修改会员卡积分规则信息 -->
+    <update id="updateIntegralRule" parameterType="com.yunpay.h5merch.permission.entity.card.IntegralRule">
+        update t_member_bonus_rule 
+         <set>
+        	<if test="1==1">
+        		init_increase_bonus = #{initIncreaseBonus,jdbcType=INTEGER},
+        	</if>
+        	<if test="1==1">
+        		cost_money_unit = #{costMoneyUnit,jdbcType=INTEGER},
+        	</if>
+        	<if test="1==1">
+        		increase_bonus = #{increaseBonus,jdbcType=INTEGER},
+        	</if>
+        	<if test="1==1">
+        		max_increase_bonus = #{maxIncreaseBonus,jdbcType=INTEGER},
+        	</if>
+        	<if test="costBonusUnit != null and costBonusUnit != ''">
+        		cost_bonus_unit = #{costBonusUnit,jdbcType=INTEGER},
+        	</if>
+        	<if test="reduceMoney != null and reduceMoney != ''">
+        		reduce_money = #{reduceMoney,jdbcType=INTEGER},
+        	</if>
+        	<if test="leastMoneyToUseBonus != null and leastMoneyToUseBonus != ''">
+        		least_money_to_use_bonus = #{leastMoneyToUseBonus,jdbcType=INTEGER},
+        	</if>
+        	<if test="maxReduceBonus != null and maxReduceBonus != ''">
+        		max_reduce_bonus = #{maxReduceBonus,jdbcType=INTEGER},
+        	</if>
+        	<if test="status != null and status != ''">
+        		status = #{status,jdbcType=INTEGER},
+        	</if>
+        </set> 
+        where merchantNo = #{merchantNo}
+    </update>
+
+    <!-- 添加会员卡积分规则信息 -->
+    <insert id="insertIntegralRule" parameterType="com.yunpay.h5merch.permission.entity.card.IntegralRule" >
+        insert into t_member_bonus_rule
+			(merchantNo,init_increase_bonus,cost_money_unit,increase_bonus,max_increase_bonus,cost_bonus_unit,reduce_money,
+			least_money_to_use_bonus,max_reduce_bonus,orgNo,status,templateId)
+			values
+			(#{merchantNo,jdbcType=VARCHAR},#{initIncreaseBonus,jdbcType=INTEGER},#{costMoneyUnit,jdbcType=INTEGER},
+			#{increaseBonus,jdbcType=INTEGER},#{maxIncreaseBonus,jdbcType=INTEGER},#{costBonusUnit,jdbcType=INTEGER},
+			#{reduceMoney,jdbcType=INTEGER},#{leastMoneyToUseBonus,jdbcType=INTEGER},#{maxReduceBonus,jdbcType=INTEGER},
+			#{orgNo,jdbcType=VARCHAR},#{status,jdbcType=INTEGER},#{templateId,jdbcType=INTEGER})
+    </insert>
+ </mapper>

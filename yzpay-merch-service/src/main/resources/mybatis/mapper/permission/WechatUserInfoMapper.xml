@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.h5merch.dao.impl.WechatUserInfoDaoImpl">
+
+	<!-- 根据id查询微信用户 -->
+	<select id="findById" parameterType="Integer" resultType="com.yunpay.h5merch.permission.entity.WechatUserInfo">
+	    select * from t_wechat_userinfo where id=#{id}
+	</select>
+	
+	<!-- 根据openId查询微信用户 -->
+	<select id="findByOpenId" parameterType="String" resultType="com.yunpay.h5merch.permission.entity.WechatUserInfo">
+	    select * from t_wechat_userinfo where openId=#{openId}
+	</select>
+	
+	<!-- 根据unionId查询微信用户 -->
+	<select id="findByUnionId" parameterType="String" resultType="com.yunpay.h5merch.permission.entity.WechatUserInfo">
+	    select * from t_wechat_userinfo where unionId=#{unionId}
+	</select>
+	
+	<!-- 根据微信用户信息查询微信用户列表 -->
+	<select id="listByEntity" parameterType="com.yunpay.h5merch.permission.entity.WechatUserInfo" resultType="com.yunpay.h5merch.permission.entity.WechatUserInfo">
+	    select * from t_wechat_userinfo 
+	    <where>
+	    1=1
+	    <if test="id != null and id != ''"> and id=#{id}</if>
+	    <if test="openId != null and openId != ''"> and openId=#{openId}</if>
+	    <if test="nickName != null and nickName != ''"> and nickName=#{nickName}</if>
+	    <if test="country != null and country != ''"> and country=#{country}</if>
+	    <if test="sex != null and sex != ''"> and sex=#{sex}</if>
+	    <if test="province != null and province != ''"> and province=#{province}</if>
+	    <if test="city != null and city != ''"> and city=#{city}</if>
+	    <if test="privilege != null and privilege != ''"> and privilege like #{privilege}</if>
+	    <if test="unionId != null and unionId != ''"> and unionId=#{unionId}</if>
+	    </where>
+	    order by createTime desc
+	</select>
+	
+	<!-- 查询微信用户 -->
+	<select id="listAllWechatUser"  resultType="com.yunpay.h5merch.permission.entity.WechatUserInfo">
+	    select * from t_wechat_userinfo where 1=1
+	    order by createTime desc
+	</select>
+	
+	<!-- 修改微信信息 -->
+	<update id="updateMsg" parameterType="com.yunpay.h5merch.permission.entity.WechatUserInfo" >
+	    update t_wechat_userinfo 
+	  <set>
+	    <if test="nikeName !=null and nikeName != ''">
+				nikeName= #{nikeName},
+		</if>
+	    <if test="sex !=null and sex != ''">
+				sex= #{sex},
+		</if>
+	    <if test="country !=null and country != ''">
+				country= #{country},
+		</if>
+	    <if test="province !=null and province != ''">
+				province= #{province},
+		</if>
+	    <if test="city !=null and city != ''">
+				city= #{city},
+		</if>
+	    <if test="headImgUrl !=null and headImgUrl != ''">
+				headImgUrl= #{headImgUrl},
+		</if>
+		 <if test="privilege !=null and privilege != ''">
+				privilege= #{privilege}
+		</if>		
+		 <if test="unionId !=null and unionId != ''">
+				unionId= #{unionId}
+		</if>		
+				updateTime= now()		
+	  </set>
+	  where id = #{id}
+	</update>
+	
+	<!-- 添加微信用户 -->
+	<insert id="insert" parameterType="com.yunpay.h5merch.permission.entity.WechatUserInfo" keyProperty="id" useGeneratedKeys="true">
+		insert into	t_wechat_userInfo
+		( openId,nickName,sex,country,province,city,headImgUrl,privilege,unionId,createTime)
+		values
+		(	#{openId,jdbcType=VARCHAR},#{nickName,jdbcType=VARCHAR},#{sex,jdbcType=INTEGER},
+			#{country,jdbcType=VARCHAR},#{province,jdbcType=VARCHAR},#{city,jdbcType=VARCHAR},
+			#{headImgUrl,jdbcType=VARCHAR},#{privilege,jdbcType=VARCHAR},#{unionId,jdbcType=CHAR},
+			now())				
+	</insert>
+	
+	<!-- 删除微信用户 -->
+	<delete id="deleteById" parameterType="Integer">
+	    delete from t_wechat_userinfo where id=#{id}
+	</delete>
+	
+	<!-- 删除微信用户 -->
+	<delete id="deleteByOpenId" parameterType="String">
+	    delete from t_wechat_userinfo where openId=#{openId}
+	</delete>
+</mapper>

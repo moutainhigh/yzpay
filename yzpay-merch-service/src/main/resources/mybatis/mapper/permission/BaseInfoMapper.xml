@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.h5merch.dao.impl.card.BaseInfoDaoImpl">	    
+    
+ 	<!-- 根据模板ID查找基本信息 -->
+ 	<select id="getBaseInfo" parameterType="Integer" resultType="com.yunpay.h5merch.permission.entity.card.BaseInfo">
+ 		select  
+		id, logo_url as logoUrl,logo_local_url as logoLocalUrl,code_type as codeType,brand_name as brandName,title as title,sub_title as subTitle,color as color,
+		notice as notice,description as description,sku_quantity as skuQuantity,date_info_type as dateInfoType,
+		begin_times as beginTimes,end_times as endTimes,fixed_term as fixedTerm,fixed_begin_term as fixedBeginTerm,
+		use_custom_code as useCustomCode,bind_openid as bindOpenid,service_phone as servicePhone,
+		location_id_list as locationIdList,source as source,custom_url_name as customUrlName,
+		custom_url as customUrl,custom_url_sub_title as customUrlSubTitle,promotion_url_name as promotionUrlName,
+		promotion_url as promotionUrl,promotion_url_sub_title as promotionUrlSubTitle,get_limit as getLimit,
+		can_share as canShare,can_give_friend as canGiveFriend,need_push_on_view as needPushOnView
+		from t_membercard_baseinfo
+ 		where id=#{id}
+ 	</select>
+ 	
+ 	<!-- 根据模板ID删除会员卡 -->
+    <delete id="deleteBaseInfo" parameterType="Integer">
+    	delete  from t_membercard_baseinfo
+    	where id = #{id}
+    </delete>
+      	  
+    <!-- 修改会员卡基本信息 -->
+    <update id="updateBaseInfo" parameterType="com.yunpay.h5merch.permission.entity.card.BaseInfo">
+        update t_membercard_baseinfo
+        <set>
+        	<if test="logoUrl != null and logoUrl != ''">
+        		logo_url = #{logoUrl},
+        	</if>
+        	<if test="logoLocalUrl != null and logoLocalUrl != ''">
+        		logo_local_url = #{logoLocalUrl},
+        	</if>
+        	<if test="codeType != null and codeType != ''">
+        		code_type = #{codeType},
+        	</if>
+        	<if test="brandName != null and brandName != ''">
+        		brand_name = #{brandName},
+        	</if>
+        	<if test="title != null and title != ''">
+        		title = #{title},
+        	</if>
+        	<if test="subTitle != null and subTitle != ''">
+        		sub_title = #{subTitle},
+        	</if>
+        	<if test="color != null and color != ''">
+        		color = #{color},
+        	</if>
+        	<if test="notice != null and notice != ''">
+        		notice = #{notice},
+        	</if>
+        	<if test="description != null and description != ''">
+        		description = #{description},
+        	</if>
+        	<if test="skuQuantity != null and skuQuantity != ''">
+        		sku_quantity = #{skuQuantity},
+        	</if>
+        	<if test="dateInfoType != null and dateInfoType != ''">
+        		date_info_type = #{dateInfoType},
+        	</if>
+        	<if test="beginTimes != null and beginTimes != ''">
+        		begin_times = #{beginTimes},
+        	</if>
+        	<if test="endTimes != null and endTimes != ''">
+        		end_times = #{endTimes},
+        	</if>
+        	<if test="fixedTerm != null and fixedTerm != ''">
+        		fixed_term = #{fixedTerm},
+        	</if>
+        	<if test="fixedBeginTerm != null and fixedBeginTerm != ''">
+        		fixed_begin_term = #{fixedBeginTerm},
+        	</if>
+        	<if test="useCustomCode != null and useCustomCode != ''">
+        		use_custom_code = #{useCustomCode},
+        	</if>
+        	<if test="bindOpenid != null and bindOpenid != ''">
+        		bind_openid = #{bindOpenid},
+        	</if>
+        	<if test="servicePhone != null and servicePhone != ''">
+        		service_phone = #{servicePhone},
+        	</if>
+        	<if test="locationIdList != null and locationIdList != ''">
+        		location_id_list = #{locationIdList},
+        	</if>
+        	<if test="source != null and source != ''">
+        		source = #{source},
+        	</if>
+        	<if test="customUrlName != null and customUrlName != ''">
+        		custom_url_name = #{customUrlName},
+        	</if>
+        	<if test="customUrl != null and customUrl != ''">
+        		custom_url = #{customUrl},
+        	</if>
+        	<if test="customUrlSubTitle != null and customUrlSubTitle != ''">
+        		custom_url_sub_title = #{customUrlSubTitle},
+        	</if>
+        	<if test="promotionUrlName != null and promotionUrlName != ''">
+        		promotion_url_name = #{promotionUrlName},
+        	</if>
+        	<if test="promotionUrl != null and promotionUrl != ''">
+        		promotion_url = #{promotionUrl},
+        	</if>
+        	<if test="promotionUrlSubTitle != null and promotionUrlSubTitle != ''">
+        		promotion_url_sub_title = #{promotionUrlSubTitle},
+        	</if>
+        	<if test="getLimit != null and getLimit != ''">
+        		get_limit = #{getLimit},
+        	</if>
+        	<if test="canShare != null and canShare != ''">
+        		can_share = #{canShare},
+        	</if>
+        	<if test="canGiveFriend != null and canGiveFriend != ''">
+        		can_give_friend = #{canGiveFriend},
+        	</if>
+        	<if test="needPushOnView != null and needPushOnView != ''">
+        		need_push_on_view = #{needPushOnView},
+        	</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 添加会员卡基本信息 -->
+    <insert id="insertBaseInfo" parameterType="com.yunpay.h5merch.permission.entity.card.BaseInfo" >
+    	<selectKey resultType="int" keyProperty="id" order="AFTER">
+    		select @@IDENTITY as id
+		</selectKey>
+        insert into t_membercard_baseinfo
+			(logo_url,logo_local_url,code_type,brand_name,title,sub_title,color,notice,description,sku_quantity,date_info_type,begin_times,
+			end_times,fixed_term,fixed_begin_term,use_custom_code,bind_openid,service_phone,location_id_list,source,custom_url_name,
+			custom_url,custom_url_sub_title,promotion_url_name,promotion_url,promotion_url_sub_title,get_limit,can_share,can_give_friend,
+			need_push_on_view)
+			values
+			(#{logoUrl,jdbcType=VARCHAR},#{logoLocalUrl,jdbcType=VARCHAR},#{codeType,jdbcType=VARCHAR},#{brandName,jdbcType=VARCHAR},#{title,jdbcType=VARCHAR},#{subTitle,jdbcType=VARCHAR},
+			#{color,jdbcType=VARCHAR},#{notice,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{skuQuantity,jdbcType=INTEGER},
+			#{dateInfoType,jdbcType=VARCHAR},#{beginTimes,jdbcType=DATE},#{endTimes,jdbcType=DATE},#{fixedTerm,jdbcType=INTEGER},
+			#{fixedBeginTerm,jdbcType=INTEGER},#{useCustomCode,jdbcType=INTEGER},#{bindOpenid,jdbcType=INTEGER},#{servicePhone,jdbcType=VARCHAR},
+			#{locationIdList,jdbcType=VARCHAR},#{source,jdbcType=VARCHAR},#{customUrlName,jdbcType=VARCHAR},#{customUrl,jdbcType=VARCHAR},
+			#{customUrlSubTitle,jdbcType=VARCHAR},#{promotionUrlName,jdbcType=VARCHAR},#{promotionUrl,jdbcType=VARCHAR},
+			#{promotionUrlSubTitle,jdbcType=VARCHAR},#{getLimit,jdbcType=INTEGER},#{canShare,jdbcType=INTEGER},
+			#{canGiveFriend,jdbcType=INTEGER},#{needPushOnView,jdbcType=INTEGER}) 
+    </insert>
+ </mapper>

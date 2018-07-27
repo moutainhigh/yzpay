@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.h5merch.dao.impl.TransLsDaoImpl">
+	<!-- 分页查询营业日报 -->
+	<select id="listPage" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">
+			select '总计' storeName,'' storeNo,'' merchantNo,sum(h.countTran) countTran,sum(h.sumTran) sumTran  from(
+					select a.* from(
+						select ts.storeName,ts.storeNo,tptl.merchantNo,count(0) countTran,sum(transPrice) sumTran from t_pay_tran_ls tptl
+						left join t_merchant m on m.merchantNo = tptl.merchantNo
+						left join t_store_machine tsm on tsm.machineNo = tptl.terminalNum
+						inner join t_store ts on (ts.storeNo = tsm.storeNo and ts.merId = m.id)
+						where tptl.merchantNo=#{merchantNo} and tptl.status = '2'
+						and tptl.transTime BETWEEN STR_TO_DATE(#{transTime},"%Y-%m-%d") AND STR_TO_DATE(#{transTime},"%Y-%m-%d")+1
+						group by ts.storeNo,ts.storeName,tptl.merchantNo
+					)a
+			) h
+			UNION
+			select ts.storeName,ts.storeNo,tptl.merchantNo,count(0) countTran,sum(transPrice) sumTran from t_pay_tran_ls tptl
+			left join t_merchant m on m.merchantNo = tptl.merchantNo
+			left join t_store_machine tsm on tsm.machineNo = tptl.terminalNum
+			inner join t_store ts on (ts.storeNo = tsm.storeNo and ts.merId = m.id)
+			where tptl.merchantNo=#{merchantNo} and tptl.status = '2'
+
+			and tptl.transTime BETWEEN STR_TO_DATE(#{transTime},"%Y-%m-%d") AND STR_TO_DATE(#{transTime},"%Y-%m-%d")+1
+			
+			group by ts.storeNo,ts.storeName,tptl.merchantNo
+			limit #{pageIndex},#{pageSize}
+	</select>
+	
+	<!-- 查询营业日报总记录 -->
+	<select id="listPageCount" parameterType="java.util.Map" resultType="int">
+		select count(*) from(
+			select ts.storeName,ts.storeNo,tptl.merchantNo,count(0) countTran,sum(transPrice) sumTran from t_pay_tran_ls tptl
+			left join t_merchant m on m.merchantNo = tptl.merchantNo
+			left join t_store_machine tsm on tsm.machineNo = tptl.terminalNum
+			inner join t_store ts on (ts.storeNo = tsm.storeNo and ts.merId = m.id)
+			where tptl.merchantNo=#{merchantNo} and tptl.status = '2'
+			and tptl.transTime BETWEEN STR_TO_DATE(#{transTime},"%Y-%m-%d") AND STR_TO_DATE(#{transTime},"%Y-%m-%d")+1
+			group by ts.storeNo,ts.storeName,tptl.merchantNo
+		) a
+	</select>
+	
+	<!-- 查询营业日报明细 -->
+	<select id="listBy" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">
+			select '总计' channel,sum(h.countTran) countTran,sum(h.sumTran) sumTran from(
+				select a.* from(
+					select tptl.channel,count(0) countTran,sum(transPrice) sumTran from t_pay_tran_ls tptl
+					left join t_merchant m on m.merchantNo = tptl.merchantNo
+					left join t_store_machine tsm on tsm.machineNo = tptl.terminalNum
+					inner join t_store ts on (ts.storeNo = tsm.storeNo and ts.merId = m.id)
+					where tptl.merchantNo=#{merchantNo} and ts.storeNo=#{storeNo} 
+					and tptl.transTime BETWEEN STR_TO_DATE(#{transTime},"%Y-%m-%d") AND STR_TO_DATE(#{transTime},"%Y-%m-%d")+1
+					and tptl.status = '2'
+					group by tptl.channel
+				) a
+			) h
+			UNION
+			select tptl.channel,count(0) countTran,sum(transPrice) sumTran from t_pay_tran_ls tptl
+				left join t_merchant m on m.merchantNo = tptl.merchantNo
+				left join t_store_machine tsm on tsm.machineNo = tptl.terminalNum
+				inner join t_store ts on (ts.storeNo = tsm.storeNo and ts.merId = m.id)
+				where tptl.merchantNo=#{merchantNo} and ts.storeNo=#{storeNo} 
+				and tptl.transTime BETWEEN STR_TO_DATE(#{transTime},"%Y-%m-%d") AND STR_TO_DATE(#{transTime},"%Y-%m-%d")+1
+				and tptl.status = '2'
+				group by tptl.channel
+	</select>
+	
+	<!-- 查询我的账单 -->
+	<select id="bill" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">
+		select '总计' channel,sum(h.countTran) countTran,sum(h.sumTran) sumTran  from(
+			select a.* from(
+				select count(0) countTran,sum(transPrice) sumTran,t.channel from t_pay_tran_ls t
+				where t.merchantNo=#{merchantNo} and t.status = '2' 
+				and t.transTime BETWEEN STR_TO_DATE(#{transTime},"%Y-%m-%d") AND STR_TO_DATE(#{transTime},"%Y-%m-%d")+1
+				group by t.channel
+	 		) a
+		) h
+	UNION
+	select t.channel,count(0) countTran,sum(transPrice) sumTran from t_pay_tran_ls t
+			where t.merchantNo=#{merchantNo} and t.status = '2'
+			and t.transTime BETWEEN STR_TO_DATE(#{transTime},"%Y-%m-%d") AND STR_TO_DATE(#{transTime},"%Y-%m-%d")+1
+			group by t.channel limit #{pageIndex},#{pageSize}
+	</select>
+	
+	<!-- 查询我的账单总记录 -->
+	<select id="countBill" parameterType="java.util.Map" resultType="int">
+	select count(*) from(
+	select t.channel,count(0) countTran,sum(transPrice) sumTran from t_pay_tran_ls t
+			where t.merchantNo=#{merchantNo} and t.status = '2' 
+			and t.transTime BETWEEN STR_TO_DATE(#{transTime},"%Y-%m-%d") AND STR_TO_DATE(#{transTime},"%Y-%m-%d")+1
+			group by t.channel
+	) a
+	</select>
+	
+	<!-- 输出日交易图形报表数据：按时间段统计 -->
+	<select id="printDayReport" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">
+	select a.transTime,sum(a.sumTran) sumTran from(
+		select date_format(t.transTime, '%H') transTime,sum(t.transPrice) sumTran
+		from t_pay_tran_ls t 
+		LEFT JOIN t_merchant m ON m.merchantNo = t.merchantNo
+		LEFT JOIN t_store_machine tsm ON tsm.machineNo = t.terminalNum
+		INNER JOIN t_store s ON (s.storeNo = tsm.storeNo AND s.merId = m.id)
+		where t.merchantNo=#{merchantNo}
+		and t.transTime BETWEEN STR_TO_DATE(#{transTime},"%Y-%m-%d") AND STR_TO_DATE(#{transTime},"%Y-%m-%d")+1
+		and t.status = '2'
+		group by date_format(t.transTime, '%H')
+		union select '00',0
+		union select '01',0
+		union select '02',0
+		union select '03',0
+		union select '04',0
+		union select '05',0
+		union select '06',0
+		union select '07',0
+		union select '08',0
+		union select '09',0
+		union select '10',0
+		union select '11',0
+		union select '12',0
+		union select '13',0
+		union select '14',0
+		union select '15',0
+		union select '16',0
+		union select '17',0
+		union select '18',0
+		union select '19',0
+		union select '20',0
+		union select '21',0
+		union select '22',0
+		union select '23',0
+	) a  GROUP BY a.transTime having a.transTime is not null  order by a.transTime 
+	</select>
+	
+	<!-- 按时间段查询某个商户的总交易笔数、总交易金额 -->
+	<select id="sumTrans" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">	
+		select t.merchantNo, count(t.transNum) countTran,sum(t.transPrice) sumTran from t_pay_tran_ls t 
+		LEFT JOIN t_merchant m ON m.merchantNo = t.merchantNo
+		LEFT JOIN t_store_machine tsm ON tsm.machineNo = t.terminalNum
+		INNER JOIN t_store s ON (s.storeNo = tsm.storeNo AND s.merId = m.id)
+		where t.merchantNo=#{merchantNo}  and t.transTime BETWEEN STR_TO_DATE(#{transTime},"%Y-%m-%d") AND STR_TO_DATE(#{transTime},"%Y-%m-%d")+1
+		and t.status = '2'
+	</select>
+	
+	<!-- 按日查询某个商户的总交易笔数、总交易金额 -->
+	<select id="sumTransByDay" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">	
+		select t.merchantNo,count(t.transNum) countTran,sum(t.transPrice) sumTran from t_pay_tran_ls t 
+		LEFT JOIN t_merchant m ON m.merchantNo = t.merchantNo
+		LEFT JOIN t_store_machine tsm ON tsm.machineNo = t.terminalNum
+		INNER JOIN t_store s ON (s.storeNo = tsm.storeNo AND s.merId = m.id)
+		where t.merchantNo=#{merchantNo} 
+		and t.transTime BETWEEN STR_TO_DATE(#{transTime},'%Y-%m-%d') and STR_TO_DATE(now(),'%Y-%m-%d')+1
+		and t.status = '2'
+	</select>
+	
+	<!-- 按周查询某个商户的总交易笔数、总交易金额 -->
+	<select id="sumTransByWeek" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">	
+		select t.merchantNo,count(t.transNum) countTran,sum(t.transPrice) sumTran from t_pay_tran_ls t 
+		LEFT JOIN t_merchant m ON m.merchantNo = t.merchantNo
+		LEFT JOIN t_store_machine tsm ON tsm.machineNo = t.terminalNum
+		INNER JOIN t_store s ON (s.storeNo = tsm.storeNo AND s.merId = m.id)
+		where t.merchantNo=#{merchantNo} 
+		and t.transTime BETWEEN STR_TO_DATE(#{transTime},'%Y-%m-%d') and STR_TO_DATE(#{monday},'%Y-%m-%d')+1
+		and t.status = '2'
+	</select>
+	
+	<!-- 按月查询某个商户的总交易笔数、总交易金额 -->     
+	<select id="sumTransByMonth" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">	
+		select t.merchantNo,count(t.transNum) countTran,sum(t.transPrice) sumTran from t_pay_tran_ls t 
+		LEFT JOIN t_merchant m ON m.merchantNo = t.merchantNo
+		LEFT JOIN t_store_machine tsm ON tsm.machineNo = t.terminalNum
+		INNER JOIN t_store s ON (s.storeNo = tsm.storeNo AND s.merId = m.id)
+		where t.merchantNo=#{merchantNo} 
+		and t.transTime BETWEEN STR_TO_DATE(#{transTime},'%Y-%m-%d') and STR_TO_DATE(#{nowMonth},'%Y-%m-%d')+1 
+		and t.status = '2'
+	</select>
+	
+	
+	
+	<!-- 查询按日交易的报表 -->
+	<select id="printReportByDay" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">
+	select a.transTime,sum(a.sumTran) sumTran from (
+		SELECT date_format(t.transTime,'%Y.%m.%d') transTime, sum(t.transPrice) sumTran FROM t_pay_tran_ls t 
+		LEFT JOIN t_merchant m ON m.merchantNo = t.merchantNo
+		LEFT JOIN t_store_machine tsm ON tsm.machineNo = t.terminalNum
+		INNER JOIN t_store s ON (s.storeNo = tsm.storeNo AND s.merId = m.id)
+		where 1=1
+		and t.merchantNo = #{merchantNo}
+		and t.transTime BETWEEN STR_TO_DATE(#{transTime},'%Y-%m-%d') and STR_TO_DATE(now(),'%Y-%m-%d') +1
+		and t.`status`='2' GROUP BY date_format(t.transTime,'%Y.%m.%d')
+		union
+		<foreach collection="unionDate" item="_date" index="index" separator="union">
+			 select #{_date},0
+		</foreach>
+	) a  GROUP BY a.transTime having a.transTime is not null  order by a.transTime 
+	</select>
+	
+	<!-- 查询按周交易的报表 -->
+	<select id="printReportByWeek" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">
+	select a.transTime,sum(a.sumTran) sumTran from (
+		SELECT date_format(t.transTime,'%Y.%m.%d') transTime, sum(t.transPrice) sumTran FROM t_pay_tran_ls t 
+		LEFT JOIN t_merchant m ON m.merchantNo = t.merchantNo
+		LEFT JOIN t_store_machine tsm ON tsm.machineNo = t.terminalNum
+		INNER JOIN t_store s ON (s.storeNo = tsm.storeNo AND s.merId = m.id)
+		where 1=1
+		and t.merchantNo = #{merchantNo}
+		and t.transTime BETWEEN STR_TO_DATE(#{transTime},'%Y-%m-%d') and STR_TO_DATE(#{monday},'%Y-%m-%d') +1
+		and t.`status`='2' GROUP BY date_format(t.transTime,'%Y.%m.%d')
+		union
+		<foreach collection="unionDate" item="_date" index="index" separator="union">
+			 select #{_date},0
+		</foreach>
+	) a  GROUP BY a.transTime having a.transTime is not null  order by a.transTime 
+	</select>
+	
+	<!-- 查询按月交易的报表 -->
+	<select id="printReportByMonth" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.SumTransLs">
+	select a.transTime,sum(a.sumTran) sumTran from (
+		SELECT date_format(t.transTime,'%Y.%m') transTime, sum(t.transPrice) sumTran FROM t_pay_tran_ls t 
+		LEFT JOIN t_merchant m ON m.merchantNo = t.merchantNo
+		LEFT JOIN t_store_machine tsm ON tsm.machineNo = t.terminalNum
+		INNER JOIN t_store s ON (s.storeNo = tsm.storeNo AND s.merId = m.id)
+		where 1=1
+		and t.merchantNo = #{merchantNo}
+		<![CDATA[   
+		 and  t.transTime >= STR_TO_DATE(#{transTime},'%Y-%m') and t.transTime < STR_TO_DATE(#{transTime2},'%Y-%m')
+		 ]]>  
+		and t.`status`='2' GROUP BY date_format(t.transTime,'%Y.%m')
+		union
+		<foreach collection="unionDate" item="_date" index="index" separator="union">
+			 select #{_date},0
+		</foreach>
+	) a  GROUP BY a.transTime having a.transTime is not null  order by a.transTime 
+	</select>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunpay.serv.dao.MemBonusLsDao" >
+  <resultMap id="BaseResultMap" type="com.yunpay.serv.model.MemberBonusLs" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+	<result column="source" property="source" jdbcType="INTEGER" />
+	<result column="userCardCode" property="userCardCode" jdbcType="VARCHAR" />
+	<result column="sourceTransNum" property="sourceTransNum" jdbcType="VARCHAR" />
+	<result column="beforeBonus" property="beforeBonus" jdbcType="INTEGER" />
+	<result column="changeBonus" property="changeBonus" jdbcType="INTEGER" />
+    <result column="afterBonus" property="afterBonus" jdbcType="INTEGER" />
+    <result column="changeType" property="changeType" jdbcType="INTEGER" />
+    <result column="createdAt" property="createdAt" jdbcType="TIMESTAMP" />
+    <result column="equalAmt" property="equalAmt" jdbcType="REAL" />
+    <result column="tranAmt" property="tranAmt" jdbcType="REAL" />
+    <result column="merchantNo" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="termNo" property="termNo" jdbcType="VARCHAR" />
+    <result column="cashierNo" property="cashierNo" jdbcType="VARCHAR" />
+    <result column="info" property="info" jdbcType="VARCHAR" />
+    <result column="orgNo" property="orgNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="table_name">t_member_bonus_ls</sql>
+  
+  <sql id="Base_Column_List" >
+    id,source,userCardCode,sourceTransNum,beforeBonus,changeBonus,afterBonus,changeType,createdAt, 
+    equalAmt,tranAmt,merchantNo,termNo,cashierNo,info,orgNo
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from <include refid="table_name" />
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from <include refid="table_name" />
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  
+  <insert id="insert" parameterType="com.yunpay.serv.model.MemberBonusLs" useGeneratedKeys="true" keyProperty="id">
+    insert into <include refid="table_name"/> (id,source,userCardCode,sourceTransNum,beforeBonus,changeBonus,
+    afterBonus,changeType,createdAt,equalAmt,tranAmt,merchantNo,termNo,cashierNo,info,orgNo)
+    values (#{id,jdbcType=INTEGER}, #{source,jdbcType=INTEGER}, 
+      #{userCardCode,jdbcType=VARCHAR}, #{sourceTransNum,jdbcType=VARCHAR}, #{beforeBonus,jdbcType=INTEGER}, 
+      #{changeBonus,jdbcType=INTEGER}, #{afterBonus,jdbcType=INTEGER}, #{changeType,jdbcType=INTEGER}, 
+      #{createdAt,jdbcType=TIMESTAMP}, #{equalAmt,jdbcType=REAL},#{tranAmt,jdbcType=REAL},
+      #{merchantNo,jdbcType=VARCHAR}, #{termNo,jdbcType=VARCHAR}, #{cashierNo,jdbcType=VARCHAR}, 
+      #{info,jdbcType=VARCHAR}, #{orgNo,jdbcType=VARCHAR})
+  </insert>
+  
+</mapper>

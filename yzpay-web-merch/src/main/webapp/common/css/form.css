@@ -1,0 +1,143 @@
+ .ipt{
+   border: none 0;
+   
+   outline: medium;
+   background: transparent;
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -moz-tap-highlight-color: transparent;
+    font-size: 12px;
+    font-weight: bold;
+}
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px white inset;
+ } 
+ 
+tr{height: 20px;}
+td{valign:bottom;}
+input{size:28px;}
+.camera{
+	width: 63px;
+	height: 63px;	
+	background-image: url(images/ic_add.png); background-repeat:no-repeat; background-attachment: fixed;no-repeat;
+    background-size: contain;
+    margin: 40px 45px;
+}
+.camera_border_left{
+	width: 160px;
+	height: 160px;	
+	border: 1px dashed #DDDDDD;
+	float: left; margin-left: 20px;
+}
+.camera_t_left{float: left; margin-top: 120px; margin-left: -120px;}
+.camera_border_right{
+	width: 160px;
+	height: 160px;	
+	border: 1px dashed #DDDDDD;
+	float: right; margin-right: 20px;
+}
+.camera_t_right{float: right; margin-top: 120px; margin-right: -110px;}
+.imgw60{width: 83px; height: 65px; opacity:0.5; margin-left: -10px;}
+.hidden{display:  none;}
+.f12{font-size: 12px; font-weight: bold;}	
+body{background-color: f6f2f1;}
+
+.padding-top5{padding-top: 5px;}
+.padding-top10{padding-top: 10px;}
+.padding-top15{padding-top: 15px;}
+
+
+.float_l{float: left;}
+.float_r{float: right;}
+
+.margin-top5{margin-top: 5px;}
+.margin-top10{margin-top: 10px;}
+.margin-top15{margin-top: 15px;}
+
+.margin-left1{margin-left: 1px;}
+.margin-left2{margin-left: 2px;}
+.margin-left3{margin-left: 3px;}
+.margin-left4{margin-left: 4px;}
+.margin-left5{margin-left: 5px;}
+.margin-left6{margin-left: 6px;}
+.margin-left7{margin-left: 7px;}
+.margin-left8{margin-left: 8px;}
+.margin-left9{margin-left: 9px;}
+.margin-left10{margin-left: 10px;}
+.margin-left11{margin-left: 11px;}
+.margin-left12{margin-left: 12px;}
+.margin-left13{margin-left: 13px;}
+.margin-left14{margin-left: 14px;}
+.margin-left15{margin-left: 15px;}
+.margin-left16{margin-left: 16px;}
+.margin-left17{margin-left: 17px;}
+.margin-left18{margin-left: 18px;}
+.margin-left19{margin-left: 19px;}
+.margin-left20{margin-left: 20px;}
+.margin-left21{margin-left: 21px;}
+.margin-left22{margin-left: 22px;}
+.margin-left23{margin-left: 23px;}
+.margin-left24{margin-left: 24px;}
+.margin-left25{margin-left: 25px;}
+.margin-left26{margin-left: 26px;}
+.margin-left27{margin-left: 27px;}
+.margin-left28{margin-left: 28px;}
+.margin-left29{margin-left: 29px;}
+.margin-left30{margin-left: 30px;}
+.margin-left31{margin-left: 31px;}
+.margin-left32{margin-left: 32px;}
+.margin-left33{margin-left: 33px;}
+.margin-left34{margin-left: 34px;}
+.margin-left35{margin-left: 35px;}
+.margin-left36{margin-left: 36px;}
+.margin-left37{margin-left: 37px;}
+.margin-left38{margin-left: 38px;}
+.margin-left39{margin-left: 39px;}
+.margin-left40{margin-left: 40px;}
+.margin-left41{margin-left: 41px;}
+.margin-left42{margin-left: 42px;}
+.margin-left43{margin-left: 43px;}
+.margin-left44{margin-left: 44px;}
+.margin-left45{margin-left: 45px;}
+.margin-left50{margin-left: 50px;}
+
+.margin-right160{margin-right: 160px;}
+
+.padding100{padding-left: 100px;}
+.padding95{padding-left: 95px;}
+.padding90{padding-left: 90px;}
+.padding80{padding-left: 80px;}
+.padding85{padding-left: 85px;}
+.padding70{padding-left: 70px;}
+.padding65{padding-left: 65px;}
+.padding60{padding-left: 60px;}
+.padding59{padding-left: 59px;}
+.padding58{padding-left: 58px;}
+.padding55{padding-left: 55px;}
+.padding50{padding-left: 50px;}
+.padding45{padding-left: 45px;}
+.padding41{padding-left: 41px;}
+.padding42{padding-left: 42px;}
+.padding43{padding-left: 43px;}
+.padding44{padding-left: 44px;}
+.padding35{padding-left: 35px;}
+.padding20{padding-left: 20px;}
+.padding21{padding-left: 21px;}
+.padding22{padding-left: 22px;}
+.padding23{padding-left: 23px;}
+.padding10{padding-left: 10px;}
+.padding9{padding-left: 9px;}
+.padding8{padding-left: 8px;}
+.padding7{padding-left: 7px;}
+.padding6{padding-left: 6px;}
+
+.opacity10{opacity:1.0 }
+.opacity7{opacity:0.7 }
+.opacity6{opacity:0.6 }
+.opacity5{opacity:0.5 }
+.opacity4{opacity:0.4 }
+.opacity3{opacity:0.3 }
+.opacity2{opacity:0.2 }

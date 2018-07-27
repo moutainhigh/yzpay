@@ -1,0 +1,43 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+   xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd" updateCheck="false" dynamicConfig="false">
+    <diskStore path="/usr/local/yzpay/ehcache"/>
+    <!-- 
+    <defaultCache
+    	maxElementsInMemory="5000"
+            eternal="false"
+            overflowToDisk="false" 
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            diskSpoolBufferSizeMB="30"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU">
+  	</defaultCache>-->
+    <!-- 微信access_token -->
+    <!--   <cache name="wxAccessToken"
+    	maxElementsInMemory = "5000"
+        eternal="false"
+        overflowToDisk="false" 
+        diskSpoolBufferSizeMB="30"
+        timeToIdleSeconds="7000"
+        timeToLiveSeconds="7000"
+        memoryStoreEvictionPolicy = "LFU" /> -->
+        <defaultCache 
+		maxElementsInMemory="1000" 
+		eternal="false" 
+		overflowToDisk="true" 
+		timeToIdleSeconds="300" 
+		timeToLiveSeconds="180" 
+		diskPersistent="false" 
+		diskExpiryThreadIntervalSeconds="120" /> 
+
+	<cache 
+		name="wxAccessToken" 
+		maxElementsInMemory="1000" 
+		eternal="false" 
+		timeToIdleSeconds="7000" 
+		timeToLiveSeconds="7000" 
+		overflowToDisk="true" 
+		diskPersistent="false" 
+		diskExpiryThreadIntervalSeconds="120" > 
+	</cache> 
+</ehcache>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yunpay.serv.dao.MemBonusRuleDao" >
+  <resultMap id="BaseResultMap" type="com.yunpay.serv.model.MemberBonusRule" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+	<result column="merchantNo" property="merchantNo" jdbcType="VARCHAR" />
+    <result column="init_increase_bonus" property="init_increase_bonus" jdbcType="INTEGER" />
+    <result column="cost_money_unit" property="cost_money_unit" jdbcType="REAL" />
+    <result column="increase_bonus" property="increase_bonus" jdbcType="INTEGER" />
+    <result column="max_increase_bonus" property="max_increase_bonus" jdbcType="INTEGER" />
+    <result column="cost_bonus_unit" property="cost_bonus_unit" jdbcType="INTEGER" />
+    <result column="reduce_money" property="reduce_money" jdbcType="REAL" />
+    <result column="least_money_to_use_bonus" property="least_money_to_use_bonus" jdbcType="REAL" />
+    <result column="max_reduce_bonus" property="max_reduce_bonus" jdbcType="INTEGER" />
+    <result column="discount" property="discount" jdbcType="INTEGER" />
+    <result column="orgNo" property="orgNo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="table_name">t_member_bonus_rule</sql>
+  
+  <sql id="Base_Column_List" >
+    id, merchantNo, init_increase_bonus, cost_money_unit, increase_bonus, max_increase_bonus, cost_bonus_unit, reduce_money, 
+    least_money_to_use_bonus, max_reduce_bonus,discount,status,orgNo
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from <include refid="table_name" />
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from <include refid="table_name" />
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+</mapper>

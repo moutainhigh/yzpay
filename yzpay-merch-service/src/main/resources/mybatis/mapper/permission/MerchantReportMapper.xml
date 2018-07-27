@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.permission.dao.impl.MerchantReportDaoImpl">
+	<!-- 商户交易流水分页查询 -->
+	<select id="listPage" parameterType="java.util.Map" resultType="com.yunpay.permission.entity.PayTranLs">
+		select t.user_order_no,t.merchantNo,s.storeName,t.channel,t.transTime,t.transPrice,t.status, s.storeNo,t.transNum from t_pay_tran_ls t 
+		left join t_merchant m on m.merchantNo = t.merchantNo
+		left join t_store_machine tsm on tsm.machineNo = t.terminalNum
+		inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+		left join t_merchant_user tmu on tmu.loginName = t.cashierNo
+		where (t.status = 2 or t.status = 3 or t.status = 6) and t.merchantNo = #{merchantNo}
+		order by t.transTime desc
+		limit #{pageIndex},#{pageSize}
+	</select>
+	
+	
+	<!-- 查询交易流水总记录数 -->
+	<select id="listPageCount" parameterType="java.util.Map" resultType="int">
+		select count(*) from(
+			select t.user_order_no, s.storeName,t.channel,t.transTime,t.transPrice,t.status, s.storeNo,t.transNum from t_pay_tran_ls t 
+			left join t_merchant m on m.merchantNo = t.merchantNo
+			left join t_store_machine tsm on tsm.machineNo = t.terminalNum
+			inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+			left join t_merchant_user tmu on tmu.loginName = t.cashierNo
+			where (t.status = 2 or t.status = 3 or t.status = 6) and t.merchantNo = #{merchantNo}
+			order by t.transTime desc
+		) a
+	</select>
+	
+	
+	<!-- 查询交易流水详细 -->
+	<select id="listByColumn" parameterType="java.util.Map" resultType="com.yunpay.permission.entity.PayTranLs">
+		select t.transPrice,t.totalPrice, t.user_order_no,s.storeName,tmu.userName cashier,t.transTime,t.`status` from t_pay_tran_ls t 
+		left join t_merchant m on m.merchantNo = t.merchantNo
+		left join t_store_machine tsm on tsm.machineNo = t.terminalNum
+		inner join t_store s on (s.storeNo = tsm.storeNo and s.merId = m.id)
+		left join t_merchant_user tmu on tmu.loginName = t.cashierNo
+		where (t.status = 2 or t.status = 3 or t.status = 6) and t.merchantNo = #{merchantNo} and t.transNum=#{transNum}
+	</select>
+</mapper>

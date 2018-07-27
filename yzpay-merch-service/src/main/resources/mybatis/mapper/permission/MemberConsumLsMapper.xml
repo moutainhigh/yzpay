@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.h5merch.dao.impl.MemberConsumLsDaoImpl">
+	
+	<!--分页查询会员消费记录 -->
+	<select id="listPage" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.MemberConsumLs">
+		select t.*,s.storeName,tmu.userName cashier from t_member_consum_ls t 
+		left join t_merchant m on m.merchantNo = t.merchantNo
+		left join t_store_machine tsm on tsm.machineNo = t.termNo
+		left join t_store s on s.storeNo = tsm.storeNo
+		left join t_merchant_user tmu on tmu.loginName = t.cashierNo
+		where t.merchantNo = #{merchantNo}
+		<!-- 店长角色查询自己门店所有收银员的会员消费记录 -->
+		<if test="userType == '2'.toString()">
+			and s.storeNo=#{storeNo} 
+		</if>
+		<!-- 收银员角色查询自己门店下自己的会员消费记录 -->
+		<if test="userType == '3'.toString()">
+			and t.cashierNo = #{cashierNo} and tsm.machineNo=#{machineNo}
+		</if>
+		order by t.createdAt desc
+		limit #{pageIndex},#{pageSize}
+	</select>
+	
+	
+	<!-- 查询会员消费记录总数 -->
+	<select id="listPageCount" parameterType="java.util.Map" resultType="int">  
+		select count(*) from(
+	 		select t.* from t_member_consum_ls t 
+			left join t_merchant m on m.merchantNo = t.merchantNo
+			left join t_store_machine tsm on tsm.machineNo = t.termNo
+			left join t_store s on s.storeNo = tsm.storeNo
+			left join t_merchant_user tmu on tmu.loginName = t.cashierNo
+			where t.merchantNo = #{merchantNo}
+			<!-- 店长角色查询自己门店所有收银员的会员消费记录 -->
+			<if test="userType == '2'.toString()">
+				and s.storeNo=#{storeNo} 
+			</if>
+			<!-- 收银员角色查询自己门店下自己的会员消费记录 -->
+			<if test="userType == '3'.toString()">
+				and t.cashierNo = #{cashierNo} and tsm.machineNo =#{machineNo}
+			</if>
+		) a
+	</select>
+	
+	<!-- 根据交易单号查询单条会员流水 -->
+	<select id="listBy" parameterType="java.util.Map" resultType="com.yunpay.h5merch.permission.entity.MemberConsumLs">
+		select * from t_member_consum_ls t where t.transNum=#{transNum}
+	
+	</select>
+</mapper>

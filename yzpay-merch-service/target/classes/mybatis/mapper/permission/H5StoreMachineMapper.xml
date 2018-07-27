@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yunpay.h5merch.dao.impl.H5StoreMachineDaoImpl">	    
+    <!-- 根据条件查询门店机器号  -->
+    <select id="getMachineByStoreNo" parameterType="String" resultType="com.yunpay.h5merch.permission.entity.StoreMachine">
+        SELECT * from t_store_machine 
+		where  storeNo = #{storeNo}        
+    </select>   
+    <!-- 根据storeNo删除门店机器号 -->
+    <delete id="deleteByStoreNo" parameterType="String">
+        delete from t_store_machine
+        where storeNo = #{storeNo}
+    </delete>  
+ </mapper>
